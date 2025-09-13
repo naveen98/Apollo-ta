@@ -14,8 +14,8 @@ import org.testng.annotations.DataProvider;
                 "junit:target/cucumber-reports/Cucumber.xml",
                 "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"
         },
-        monochrome = true
-        //dryRun =false
+        monochrome = true,
+        dryRun =false
 
 )
 public class TestNGRunner extends AbstractTestNGCucumberTests {

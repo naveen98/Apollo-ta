@@ -22,7 +22,7 @@ public class TalentAcqconfiguration {
             pro = new Properties();
             pro.load(inputStream);
 
-            // Read environment value
+            // Read environment
             String env = pro.getProperty("env");
             if (env == null) {
                 throw new RuntimeException("'env' property missing in global.properties");
@@ -54,14 +54,17 @@ public class TalentAcqconfiguration {
     }
 
     public String geturl() {
+
         return url;
     }
 
     public String getusername() {
+
         return username;
     }
 
     public String getpassword() {
+
         return password;
     }
 }

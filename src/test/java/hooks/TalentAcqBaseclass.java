@@ -34,9 +34,12 @@ public class TalentAcqBaseclass {
 
     private static WebDriver newDriver(String br) {
         switch (br.toLowerCase()) {
-            case "firefox": return new FirefoxDriver();
-            case "edge":    return new EdgeDriver();
-            default:        return new ChromeDriver();
+            case "firefox":
+                return new FirefoxDriver();
+            case "edge":
+                return new EdgeDriver();
+            default:
+                return new ChromeDriver();
         }
     }
 
@@ -68,6 +71,7 @@ public class TalentAcqBaseclass {
 
     @AfterAll
     public static void afterAll() {
+
         DriverManager.quitDriver();
     }
 }

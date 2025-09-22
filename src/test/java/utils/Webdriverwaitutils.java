@@ -118,6 +118,10 @@ public class Webdriverwaitutils {
 	        }
 	    }
 
+    public void waitForInvisibilityOfElementLocated(By locator, int timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
+    }
 		
 
 }

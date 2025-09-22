@@ -49,8 +49,7 @@ public class CreateVenuPage {
 
 
 
-
-    By availabityoptions = By.xpath("//li[@role='option']");
+By availabityoptions = By.xpath("//li[@role='option']");
 
     By stateoptions = By.xpath("//li[@class='ui-multiselect-item ui-corner-all']");
 

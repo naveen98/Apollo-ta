@@ -19,13 +19,15 @@ public class AppSelectionSteps {
        ap=new Appselectionpage(driver);
 
     }
-    @When("user clicks on the Talent_Acquistion")
-    public void user_clicks_on_the_talent_acquistion() {
-       ap.clickOnAppSelection();
+    @When("user clicks on the appselection")
+    public void user_clicks_on_the_appselection() {
+
+             ap.clickOnAppSelection("talentacq");
     }
     @Then("Apollo TalentAcq app should be displayed")
     public void apollo_talent_acq_app_should_be_displayed() {
       boolean displayed=ap.isAppDisplayed();
         Assert.assertTrue(displayed ,"Talent Acquistion is not displayed");
     }
+
 }

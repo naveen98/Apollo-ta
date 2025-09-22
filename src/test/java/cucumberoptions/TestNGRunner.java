@@ -5,7 +5,7 @@ import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
 
 @CucumberOptions(
-        features = "src/test/java/features",
+        features = "src/test/java/features/TalentAcq.feature",
         glue = {"stepdefinitions", "hooks"},
         plugin = {
                 "pretty",
@@ -15,7 +15,8 @@ import org.testng.annotations.DataProvider;
                 "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"
         },
         monochrome = true,
-        dryRun =false
+        dryRun =false,
+        tags="@smoke"
 
 )
 public class TestNGRunner extends AbstractTestNGCucumberTests {

@@ -10,14 +10,19 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import utils.TalentAcqconfiguration;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class TalentAcqBaseclass {
@@ -35,11 +40,32 @@ public class TalentAcqBaseclass {
     private static WebDriver newDriver(String br) {
         switch (br.toLowerCase()) {
             case "firefox":
-                return new FirefoxDriver();
+                FirefoxOptions ffOptions = new FirefoxOptions();
+                ffOptions.addPreference("geo.prompt.testing", true);   // auto-respond
+                ffOptions.addPreference("geo.prompt.testing.allow", true); // allow location
+                return new FirefoxDriver(ffOptions);
+
             case "edge":
-                return new EdgeDriver();
-            default:
-                return new ChromeDriver();
+                EdgeOptions edgeOptions = new EdgeOptions();
+                Map<String, Object> edgePrefs = new HashMap<>();
+                Map<String, Object> edgeProfile = new HashMap<>();
+                Map<String, Object> edgeContent = new HashMap<>();
+                edgeContent.put("geolocation", 1); // 1=allow, 2=block
+                edgeProfile.put("default_content_setting_values", edgeContent);
+                edgePrefs.put("profile", edgeProfile);
+                edgeOptions.setExperimentalOption("prefs", edgePrefs);
+                return new EdgeDriver(edgeOptions);
+
+            default: // chrome
+                ChromeOptions chromeOptions = new ChromeOptions();
+                Map<String, Object> prefs = new HashMap<>();
+                Map<String, Object> profile = new HashMap<>();
+                Map<String, Object> content = new HashMap<>();
+                content.put("geolocation", 1); // block location prompt
+                profile.put("default_content_setting_values", content);
+                prefs.put("profile", profile);
+                chromeOptions.setExperimentalOption("prefs", prefs);
+                return new ChromeDriver(chromeOptions);
         }
     }
 

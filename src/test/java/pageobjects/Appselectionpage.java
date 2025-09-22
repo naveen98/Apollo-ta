@@ -27,15 +27,34 @@ public class Appselectionpage {
     @FindBy(xpath = "//h3[normalize-space()='Talent Acquisition']")
     private WebElement textdisplay;
 
+    @FindBy(xpath = "//strong[normalize-space()='Administration']")private WebElement adminselection;
+
+
+
     // Actions
-    public void clickOnAppSelection() {
+    public void clickOnAppSelection(String appselect) {
         try {
-           WebElement app= wait.waitForClickability(Taselection);
-           app.click();
+            if(appselect.equalsIgnoreCase("admin")) {
+                WebElement app = wait.waitForClickability(adminselection);
+                app.click();
+                System.out.println("Admin selected");
+            } else if (appselect.equalsIgnoreCase("talentacq")) {
+
+                WebElement app = wait.waitForClickability(Taselection);
+                app.click();
+                System.out.println("Talent Acquistion selected");
+            }
+
         }
         catch (Exception e){
-            js.executeScript("arguments[0].click();", Taselection);        }
+            if (appselect.equalsIgnoreCase("admin")) {
+                js.executeScript("arguments[0].click();", adminselection);
+            } else if (appselect.equalsIgnoreCase("talentacq")) {
+                js.executeScript("arguments[0].click();", Taselection);
+            }
+        }
     }
+
 
     public boolean isAppDisplayed() {
         try {

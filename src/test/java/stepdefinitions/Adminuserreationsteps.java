@@ -22,7 +22,7 @@ public class Adminuserreationsteps {
 
     @When("i create a user from Excel")
     public void i_create_a_user_from_excel() throws IOException {
-        String path = "E:\\projects\\raj-projects\\TalentAcquisition\\src\\test\\resources\\adminusercreation.xlsx";
+        String path = "C:\\Users\\navee\\IdeaProjects\\Apollo-ta\\src\\test\\resources\\adminusercreation.xlsx";
         String sheetname = "user";
 
         String[][] data = Excelutils.getcelldatas(path, sheetname);

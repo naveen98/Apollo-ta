@@ -43,7 +43,7 @@ public class CamapignCreationSteps {
 
     @When("i create new campaign from excel sheet")
     public void i_create_new_campaign_from_excel_sheet() throws IOException {
-        String path = "E:\\projects\\raj-projects\\TalentAcquisition\\src\\test\\resources\\campaigncreation.xlsx";
+        String path = "C:\\Users\\navee\\IdeaProjects\\Apollo-ta\\src\\test\\resources\\campaigncreation.xlsx";
         String sheetname = "create";
 
         String[][] data = Excelutils.getcelldatas(path, sheetname);

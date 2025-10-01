@@ -14,7 +14,7 @@ public class CreateVenuConfigureSteps {
     WebDriver driver;
     CreateVenuPage venupage;
 
-    private static final String FILE_PATH = "E:\\projects\\raj-projects\\TalentAcquisition\\src\\test\\resources\\configurevenu.xlsx";
+    private static final String FILE_PATH = "C:\\Users\\navee\\IdeaProjects\\Apollo-ta\\src\\test\\resources\\configurevenu.xlsx";
     private static final String SHEET_NAME = "venu";
 
 

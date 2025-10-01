@@ -23,10 +23,22 @@ Feature: Talent Acquisition
     Given I am on the Venu Module page
     When I create new Venu Configuration  from Excel test data
 
-    @smoke
+    @regression
     Scenario: navigate to campaign module
       Given i am on the campagn module page
       When i navigate to campaign module
       Then i create new campaign from excel sheet
+
+      @smokes
+      Scenario: naviagte to job module
+        Given i navigate to job module page
+        When i create job from excel sheet
+
+      @smoke
+      Scenario:navigate to vacancy module
+        Given i navigated to vacancy module
+        Then i create a vacancy from excel sheet
+
+
 
 

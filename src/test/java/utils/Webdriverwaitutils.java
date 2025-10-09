@@ -60,7 +60,6 @@ public class Webdriverwaitutils {
 	                ele.clear();
 	                ele.sendKeys(text);
 	            } catch (Exception e) {
-	                // JavaScript fallback if clear/sendKeys fails
 	                JavascriptExecutor js = (JavascriptExecutor) driver;
 	                js.executeScript("arguments[0].value = arguments[1];", ele, text);
 	            }

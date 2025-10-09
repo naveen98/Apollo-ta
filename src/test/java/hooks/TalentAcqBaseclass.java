@@ -5,6 +5,7 @@ import io.cucumber.java.AfterAll;
 import io.cucumber.java.AfterStep;
 import io.cucumber.java.BeforeAll;
 import io.cucumber.java.Scenario;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -46,15 +47,23 @@ public class TalentAcqBaseclass {
                 return new FirefoxDriver(ffOptions);
 
             case "edge":
-                EdgeOptions edgeOptions = new EdgeOptions();
-                Map<String, Object> edgePrefs = new HashMap<>();
+                EdgeOptions edOptions = new EdgeOptions();
+
+                // Set geolocation preference: 1 = allow, 2 = block
+                Map<String, Object> edgeContentSettings = new HashMap<>();
+                edgeContentSettings.put("geolocation", 1);
+
                 Map<String, Object> edgeProfile = new HashMap<>();
-                Map<String, Object> edgeContent = new HashMap<>();
-                edgeContent.put("geolocation", 1); // 1=allow, 2=block
-                edgeProfile.put("default_content_setting_values", edgeContent);
+                edgeProfile.put("default_content_setting_values", edgeContentSettings);
+
+                Map<String, Object> edgePrefs = new HashMap<>();
                 edgePrefs.put("profile", edgeProfile);
-                edgeOptions.setExperimentalOption("prefs", edgePrefs);
-                return new EdgeDriver(edgeOptions);
+
+                edOptions.setExperimentalOption("prefs", edgePrefs);
+                WebDriverManager.edgedriver().setup();
+
+                return new EdgeDriver(edOptions);
+
 
             default: // chrome
                 ChromeOptions chromeOptions = new ChromeOptions();

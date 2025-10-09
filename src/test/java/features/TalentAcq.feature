@@ -25,19 +25,43 @@ Feature: Talent Acquisition
 
     @regression
     Scenario: navigate to campaign module
-      Given i am on the campagn module page
+      Given i am on the campaign module page
       When i navigate to campaign module
       Then i create new campaign from excel sheet
 
-      @smokes
-      Scenario: naviagte to job module
+      @Smoke
+      Scenario: navigate to job module
         Given i navigate to job module page
         When i create job from excel sheet
 
-      @smoke
+      @Smoke
       Scenario:navigate to vacancy module
         Given i navigated to vacancy module
         Then i create a vacancy from excel sheet
+
+
+        @Smoke
+        Scenario:navigate to vacancy module module verify edit and delete actions
+          Given i navigate to vacancy module
+          When i verify the edit action
+          Then i verify the delete action
+
+
+      @smoke
+      Scenario: Creation of Team Mapping
+        Given i navigate to team mapping module
+        Then i add user team mapping
+
+        @Smoke
+        Scenario: Under sourcing module recruitment scoring
+          Given i navigate to sourcing module under recruitment scoring
+          Then i add scoring from excel sheet
+
+          @Smoke
+          Scenario: verifying the edit and delete actions
+            Given i navigate to recruitment scourcing
+            When i click on edit action
+            Then i click on delete action
 
 
 

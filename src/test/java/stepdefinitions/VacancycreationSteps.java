@@ -29,9 +29,8 @@ public class VacancycreationSteps {
 
         String[][] data = Excelutils.getcelldatas(path, sheetname);
 
-        for (int i = 0; i < data.length; i++) {
+        for (int i = 0; i<data.length; i++) {
             System.out.println(" starting Execution ");
-
             try {
                 String siteInput = data[i][0];
                 String siteExpected = data[i][1];
@@ -46,7 +45,7 @@ public class VacancycreationSteps {
                 vc.selectdate(month, year);
                 vc.clicksave();
 
-                String message = vc.getToastMessage();
+                String message = vc.getvalidationmessage();
                 boolean success = message.toLowerCase().contains("saved") || message.toLowerCase().contains("successfully");
 
                 if (success) {

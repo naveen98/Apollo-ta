@@ -23,8 +23,8 @@ public class CamapignCreationSteps {
     public CamapignCreationSteps() throws IOException {
     }
 
-    @Given("i am on the campagn module page")
-    public void i_am_on_the_campagn_module_page() {
+    @Given("i am on the campaign module page")
+    public void i_am_on_the_campaign_module_page() {
 
         driver = DriverManager.getDriver();
         cp = new CampaignCreationPage(driver);

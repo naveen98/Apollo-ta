@@ -191,12 +191,12 @@ public class Dropdownutils {
     public static void selectFromAutoSuggest(WebDriver driver, WebElement inputField, By optionsLocator,
                                              String inputText, String expectedOptionText) {
         try {
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+          WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            inputField.click();
             inputField.clear();
             inputField.sendKeys(inputText);
 
-            List<WebElement> suggestions = wait
-                    .until(ExpectedConditions.presenceOfAllElementsLocatedBy(optionsLocator));
+            List<WebElement> suggestions = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(optionsLocator));
             boolean found = false;
 
             for (WebElement suggestion : suggestions) {
@@ -388,35 +388,51 @@ public class Dropdownutils {
                                                 WebElement searchInput,
                                                 String valueToSelect) {
         try {
-            // Click the dropdown
-            dropdownElement.click();
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
-            // Wait for the search input to appear
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", dropdownElement);
+
+
+            try {
+                dropdownElement.click();
+            } catch (ElementClickInterceptedException e) {
+                js.executeScript("arguments[0].click();", dropdownElement);
+            }
+
+            // Wait for the input
             wait.until(ExpectedConditions.visibilityOf(searchInput));
-
-
             searchInput.clear();
             searchInput.sendKeys(valueToSelect);
 
-            // Wait for options to be visible
-            wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(optionsLocator));
-            List<WebElement> options = driver.findElements(optionsLocator);
+            // Wait for options
+            wait.until(ExpectedConditions.visibilityOfElementLocated(optionsLocator));
 
-            for (WebElement option : options) {
-                if (option.getText().equalsIgnoreCase(valueToSelect)) {
-                    option.click();
-                    return;
+            boolean found = false;
+            for (int i = 0; i < 5; i++) {
+                List<WebElement> options = driver.findElements(optionsLocator);
+                for (WebElement option : options) {
+                    if (option.getText().equalsIgnoreCase(valueToSelect)) {
+                        js.executeScript("arguments[0].scrollIntoView({block:'center'});", option);
+                        js.executeScript("arguments[0].click();", option);
+                        found = true;
+                        break;
+                    }
                 }
+                if (found)
+                    break;
+
             }
 
-            throw new RuntimeException("Option '" + valueToSelect + "' not found in dropdown");
+            if (!found) {
+                throw new RuntimeException("Option '" + valueToSelect + "' not found in dropdown");
+            }
 
         } catch (Exception e) {
-            throw new RuntimeException("Failed to select value from dropdown: " + e.getMessage());
+            throw new RuntimeException("Failed to select value from dropdown: " + e.getMessage(), e);
         }
     }
-
 
 
 }

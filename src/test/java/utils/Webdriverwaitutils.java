@@ -58,6 +58,7 @@ public class Webdriverwaitutils {
 	            WebElement ele = waitForVisibility(element);
 	            try {
 	                ele.clear();
+
 	                ele.sendKeys(text);
 	            } catch (Exception e) {
 	                JavascriptExecutor js = (JavascriptExecutor) driver;

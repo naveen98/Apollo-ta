@@ -47,7 +47,7 @@ Feature: Talent Acquisition
           Then i verify the delete action
 
 
-      @smoke
+      @Smoke
       Scenario: Creation of Team Mapping
         Given i navigate to team mapping module
         Then i add user team mapping
@@ -62,6 +62,21 @@ Feature: Talent Acquisition
             Given i navigate to recruitment scourcing
             When i click on edit action
             Then i click on delete action
+
+
+            @Smoke
+            Scenario: creating recruiter ranking
+              Given i navigate to recruiter ranking
+              Then i create recruiter ranking from excel sheet
+
+        @smoke
+        Scenario: creating Questionnaire Module
+          Given i navigate to Questionnaire module
+          Then i create Questionnaire from excel sheet
+
+
+
+
 
 
 

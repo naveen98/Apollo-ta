@@ -12,7 +12,9 @@ public class TalentAcqconfiguration {
 
     public TalentAcqconfiguration() {
         try {
-            // Load global.properties from classpath (src/test/resources or src/main/resources)
+            // Load global.properties from classpath(src/test/resources or src/main/resources)
+
+            //Fileinputstream fis=new Fileinputstream(System.getproperty("user.dir")+"/src/test/resources/global.properties");
             InputStream inputStream = getClass().getClassLoader().getResourceAsStream("global.properties");
 
             if (inputStream == null) {

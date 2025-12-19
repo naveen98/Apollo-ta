@@ -1,9 +1,7 @@
 package pageobjects;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import utils.Datepickutils;
@@ -19,222 +17,166 @@ public class VacancycreationPage {
     JavascriptExecutor js;
     Datepickutils dt;
 
-
     public VacancycreationPage(WebDriver driver) {
-
         this.driver = driver;
         this.js = (JavascriptExecutor) driver;
         this.wait = new Webdriverwaitutils(driver);
-        this.dt=new Datepickutils(driver);
+        this.dt = new Datepickutils(driver);
         PageFactory.initElements(driver, this);
     }
+
+    //================== LOCATORS ==================//
 
     @FindBy(xpath = "//a[@mattooltip='Click to toggle Menu']")
     private WebElement menubar;
 
-    @FindBy(xpath = "//span[text()='Vacancy']")
+    @FindBy(xpath = "//li[@id='menu-li-vacancy-vacancy']//span[text()='Vacancies']")
     private WebElement clickvacancymodule;
 
-    @FindBy(xpath = "//span[text()='Add']")
-    private WebElement addvacancy;
+    @FindBy(xpath = "//button[contains(@class,'btn-primary')]//span[text()='Add']")
+    private WebElement AddVacancycreationbutton;
 
     @FindBy(xpath = "//p-autocomplete//input[@placeholder='Search site']")
     private WebElement siteinput;
 
+    private final By siteoptions = By.xpath("//ul[@role='listbox']//li[@role='option']");
 
-    By siteoptions = By.xpath("//ul[@role='listbox']//li[@role='option']");
-
-
-    @FindBy(xpath = "//i[@class='icon-calendar ui-state-default ng-star-inserted']")
+    @FindBy(xpath = "//input[@placeholder='MM/YYYY']")
     private WebElement dateopen;
 
-
-    // Calendar month/year selection
     private final By yearLocator = By.xpath("//div[@class='bs-datepicker-head']//button[contains(@class,'current')]");
-    private final By prevBtn = By.xpath("//div[contains(@class,'bs-datepicker-head')]//button[contains(@class,'previous')]");
-    private final By nextBtn = By.xpath("//div[contains(@class,'bs-datepicker-head')]//button[contains(@class,'next')]");
+    private final By prevBtn = By.xpath("//div[contains(@class,'previous')]");
+    private final By nextBtn = By.xpath("//div[contains(@class,'next')]");
     private final By allMonthsLocator = By.xpath("//td[@role='gridcell']//span");
-
 
     @FindBy(xpath = "//p-select[@placeholder='Select job role']")
     private WebElement jobroledrp;
 
-    By jobroleoption = By.xpath("//ul[@class='p-select-list ng-star-inserted']//li[@role='option']");
-
-
-    @FindBy(xpath = "//p-iconfield//input[@type='text']")
-    private WebElement jobrolesearchbox;
-
+    private final By jobroleoption =
+            By.xpath("//ul[@class='p-select-list ng-star-inserted']//li[@role='option']");
 
     @FindBy(xpath = "//input[@id='no_of_vacancies']")
     private WebElement Noofvacancies;
 
-    @FindBy(xpath = "//input[@id='closed_vacancies']")
-    private WebElement NoofaClosedvacancies;
-
-
     @FindBy(xpath = "//span[text()='Save']")
     private WebElement savebutton;
 
-    private final By toastOrPopupMsg = By.xpath("//div[(@role='alert' and contains(@class, 'toast-message')) or (contains(@class,'modal-body') and contains(text(),'Please enter all the mandatory fields before saving.'))]");
+    // Toast or Popup messages
+    private final By toastOrPopupMsg =
+            By.xpath("//div[(@role='alert' and contains(@class,'toast-message'))     or (contains(@class,'modal-body')     and contains(text(),'Please enter all the mandatory fields before saving'))]");
 
-    private final By toastMsg = By.xpath("//div[@role='alert' and contains(@class, 'toast-message')]");
+    @FindBy(xpath = "//button[@id='dialog-okay-btn']")
+    private WebElement popupOkButton;
+
+    @FindBy(xpath = "//button[@id='dialog-cancel-btn']")
+    private WebElement popupCancelButton;
+
+    // Close form button
+    private final By closeFormBtn =
+            By.xpath("//button[@class='close' and @title='Close']");
+
+
+
     private final By popupMessageLocator = By.xpath("//div[contains(@class,'modal-body') and contains(text(),'Please enter all the mandatory fields before saving.')]");
-    @FindBy(xpath = "//button[@class='btn btn-sm btn-primary ng-star-inserted']")private WebElement popupOkButton;
-    @FindBy(xpath = "//button[@id='dialog-cancel-btn']") private WebElement popupCancelButton;
 
 
-    @FindBy(xpath = "//button[@title='Close']")private WebElement cancelform;
 
+
+    //================== ACTION METHODS ==================//
 
     public void navigatevacancymodule() {
-        try {
-            WebElement ele = wait.waitForClickability(menubar);              //Please enter all the mandatory fields before saving
-            if (ele != null && ele.isDisplayed())
-                ele.click();
-        } catch (Exception e) {
-            js.executeScript("arguments[0].click();", menubar);
-
-
-        }
-        try {
-            WebElement vac = wait.waitForClickability(clickvacancymodule);
-            if (vac != null && vac.isDisplayed())
-                vac.click();
-        } catch (Exception e) {
-            js.executeScript("arguments[0].click();", clickvacancymodule);
-        }
-
+        clickElement(menubar);
+        clickElement(clickvacancymodule);
     }
 
-    public void addvacancy() {
+    public void addvacancyCreation() {
+        clickElement(AddVacancycreationbutton);
+    }
+
+    public void createVacancy(String inputSite, String expectedSite, String jobRole, String noOfVacancies) {
+        safeClick(siteinput);
+        Dropdownutils.selectFromAutoSuggest(driver, siteinput, siteoptions, inputSite, expectedSite);
+        Dropdownutils.selectbyvisibletextlistretry(driver, jobroledrp, jobroleoption, jobRole);
+        wait.waitForEnterText(Noofvacancies, noOfVacancies);
+    }
+
+    public void selectdate(String expmonth, String expyear) {
+        clickElement(dateopen);
+        dt.selectMonthAndYear(yearLocator, prevBtn, nextBtn, expmonth, expyear, allMonthsLocator);
+    }
+
+    public void clicksave() {
+        clickElement(savebutton);
+    }
+
+    //==================  CLICK HANDLING ==================//
+
+    private void clickElement(WebElement element) {
         try {
-            WebElement add = wait.waitForClickability(addvacancy);
-            if (add != null && add.isDisplayed())
-                add.click();
+            wait.waitForClickability(element).click();
         } catch (Exception e) {
-            js.executeScript("arguments[0].click();", addvacancy);
-        }
-    }
-
-    public void createvacancy(String inputsite,String expectedsite,  String jobrole, String noofvacancies, String noofclosedvacancies) {
-
-
-        try{
-            WebElement site=wait.waitForClickability(siteinput);
-           if (site!=null&&site.isDisplayed())
-               site.click();
-
-        } catch (Exception e) {
-            js.executeScript("arguments[0].click();",siteinput);
-        }
-
-
-        try {
-
-            Dropdownutils.selectFromAutoSuggest(driver,siteinput,siteoptions,inputsite,expectedsite);
-            Dropdownutils.selectbyvisibletextlistretry(driver,jobroledrp,jobroleoption,jobrole);
-            wait.waitForEnterText(Noofvacancies,noofvacancies);
-            wait.waitForEnterText(NoofaClosedvacancies,noofclosedvacancies);
-
-        } catch (Exception e) {
-            System.out.println("error : " + e.getMessage());
-        }
-
-    }
-
-    public void selectdate(String expmonth, String expyear){
-
-        try{
-            wait.waitForClickability(dateopen).click();
-
-             dt.selectMonthAndYear(yearLocator,prevBtn,nextBtn,expmonth,expyear,allMonthsLocator);
-
-        } catch (RuntimeException e) {
-
-            System.out.println("error : " + e.getMessage());
-        }
-
-    }
-
-    public void clicksave(){
-
-        try{
-            WebElement save=wait.waitForClickability(savebutton);
-            if (save!=null&&save.isDisplayed())
-                save.click();
-        } catch (Exception e) {
-            js.executeScript("arguments[0].click();",savebutton);
-
+            js.executeScript("arguments[0].click();", element);
         }
     }
 
-
-
-
-
-    public String getvalidationmessage() {
-
-        String message = "";
+    public void safeClick(WebElement element) {
         try {
+            js.executeScript("arguments[0].scrollIntoView(true);", element);
+            wait.waitForVisibility(element);
 
-            List<WebElement> messageElements = wait.waitForAllElementsVisible(toastOrPopupMsg);
-            if (messageElements != null && !messageElements.isEmpty()) {
-                for(WebElement msgelement:messageElements) {
-
-                    if(msgelement.isDisplayed())
-                        message =msgelement.getText();
-
-                    System.out.println("Toast message: " + message);
-
-                    switch (message) {
-
-                        case "Vacancy created successfully":
-                            return message;
-
-                        case "Vacancy is not available in this month":
-                            return message;
-
-                        case "Please enter all the mandatory fields before saving.":
-                            //scroll up and handle
-                            ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, 0);");
-
-                            handlePopupOK();
-                            cancelform();
-
-                            return "Mandatory fields missing";
-
-                        default:
-                            return message;
-
-                    }
-                }
-
-
-            }else {
-                System.out.println("Messge element not visible");
+            try {
+                wait.waitForClickability(element).click();
+            } catch (Exception e1) {
+                new Actions(driver).moveToElement(element).click().perform();
             }
-        } catch (Exception e) {
 
-            System.out.println("----------Error ------" + e.getMessage());
+        } catch (Exception e2) {
+            js.executeScript("arguments[0].click();", element);
         }
-
-        return "No Messege Displayed";
     }
 
+    //================== POPUP & MESSAGE HANDLING ==================//
 
+    public boolean popupIsVisible() {
+        try {
+            WebElement popup = wait.waitForVisibilityBy(By.xpath("//div[contains(@class,'modal-body') and contains(text(),'Please enter all the mandatory fields')]"));
+            return popup != null && popup.isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String getPopupText() {
+        try {
+            return driver.findElement(By.xpath("//div[contains(@class,'modal-body') and contains(text(),'Please enter all the mandatory fields')]"))
+                    .getText().trim();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    public void clickPopupOK() {
+        try {
+            clickElement(popupOkButton);
+        } catch (Exception ignored) {}
+    }
+
+    public void closeForm() {
+        try {
+            WebElement closeBtn = wait.waitForVisibilityBy(closeFormBtn);
+            js.executeScript("arguments[0].click();", closeBtn);
+        } catch (Exception ignored) {}
+    }
+
+    //-----------------------------------------
     public boolean handlePopupOK() {
         try {
             WebElement popupMsg = wait.waitForVisibilityBy(popupMessageLocator);
             if (popupMsg != null && popupMsg.isDisplayed()) {
                 WebElement okBtn = wait.waitForClickability(popupOkButton);
-
                 try {
                     okBtn.click();
-                    System.out.println("clicked ok button");
                 } catch (Exception ex) {
-                    System.out.println("clicked jsok button");
-
                     js.executeScript("arguments[0].click();", popupOkButton);
                 }
                 return true;
@@ -245,21 +187,45 @@ public class VacancycreationPage {
         return false;
     }
 
-    public void cancelform(){
 
-        try{
-            WebElement close=wait.waitForClickability(cancelform);
-            if (close!=null&&close.isDisplayed())
-                close.click();
+    public String getvalidationmessage() {
+        try {
+            List<WebElement> messageElements = wait.waitForAllElementsVisible(toastOrPopupMsg);
 
+            if (messageElements != null && !messageElements.isEmpty()) {
+                for (WebElement msgElement : messageElements) {
+                    if (!msgElement.isDisplayed())
+                        continue;
+
+                    String message = msgElement.getText().trim();
+                    System.out.println("Toast message: " + message);
+
+                    switch (message) {
+                        case "Vacancy created successfully":
+
+                            return message;
+
+                        case "Vacancy is already added to this month!":
+                             closeForm();
+                            return message;
+
+                        case "Please enter all the mandatory fields before saving.":
+                           // js.executeScript("window.scrollTo(0, 0);");
+                            handlePopupOK();
+                            closeForm();
+                            return "Mandatory fields missing";
+
+                    }
+                }
+            } else {
+                System.out.println("Toast or popup not visible.");
+            }
         } catch (Exception e) {
-            js.executeScript("arguments[0].click();",cancelform);
-
+            System.out.println("Error  validation message: " + e.getMessage());
         }
+        return "No Message Displayed";
     }
 
+    //---------------------------------------------------------------
 
 }
-
-
-

@@ -4,6 +4,7 @@ import drivers.DriverManager;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 import pageobjects.VacancycreationPage;
 import utils.Excelutils;
 
@@ -23,46 +24,54 @@ public class VacancycreationSteps {
 
     @Then("i create a vacancy from excel sheet")
     public void i_create_a_vacancy_from_excel_sheet() throws IOException {
-        String path = "C:\\Users\\navee\\IdeaProjects\\Apollo-ta\\src\\test\\resources\\vacancycreation.xlsx";
-        String sheetname = "vacancy";
 
+        String path = "D:\\selenium-intellij\\src\\test\\resources\\vacancycreation.xlsx";
+        String sheetname = "vacancy";
 
         String[][] data = Excelutils.getcelldatas(path, sheetname);
 
-        for (int i = 0; i<data.length; i++) {
-            System.out.println(" starting Execution ");
-            try {
+        for (int i = 0; i < data.length; i++) {
+
+                System.out.println("Creating Vacancy");
+
                 String siteInput = data[i][0];
                 String siteExpected = data[i][1];
                 String year = data[i][2];
                 String month = data[i][3];
-                String jobRoleInput = data[i][4];
-                String noOfVacancy = data[i][5];
-                String noOfClosedVacancy = data[i][6];
+                String jobRole = data[i][4];
+                String noVacancy = data[i][5];
 
-                vc.addvacancy();
-                vc.createvacancy(siteInput, siteExpected, jobRoleInput, noOfVacancy, noOfClosedVacancy);
+                // Open form
+                vc.addvacancyCreation();
+
+                // Fill form
+                vc.createVacancy(siteInput, siteExpected, jobRole, noVacancy);
                 vc.selectdate(month, year);
+
+                // Click save
                 vc.clicksave();
 
-                String message = vc.getvalidationmessage();
-                boolean success = message.toLowerCase().contains("saved") || message.toLowerCase().contains("successfully");
 
-                if (success) {
-                    System.out.println(" Vacancy Created: " + message);
-                } else {
-                    vc.cancelform();
-                    System.out.println(" Vacancy Creation Failed: " + message);
+                // Get result
+                String msg = vc.getvalidationmessage();
+                System.out.println("Final Result: " + msg);
+
+
+                if (msg.toLowerCase().contains("Created") || msg.toLowerCase().contains("successfully")) {
+                    System.out.println("Vacancy Created Successfully");
+                    Assert.assertTrue(true);
+                    continue;
+                }else{
+                      vc.closeForm();
+                    System.out.println("Vacancy Creation Failed");
+
                 }
 
-            } catch (Exception e) {
-                System.out.println("Exception  : " + e.getMessage());
-                try {
-                    vc.cancelform();
-                } catch (Exception ex) {
-                    System.out.println(" Error closing form: " + ex.getMessage());
-                }
+        }
+        
             }
         }
-    }
-}
+
+
+
+

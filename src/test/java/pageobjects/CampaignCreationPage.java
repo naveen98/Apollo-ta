@@ -1,6 +1,9 @@
 package pageobjects;
 
+import org.apache.xmlbeans.impl.xb.xsdschema.FieldDocument;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,6 +14,7 @@ import utils.Radiobuttons;
 import utils.Webdriverwaitutils;
 
 import java.nio.channels.ScatteringByteChannel;
+import java.security.PrivateKey;
 import java.time.Duration;
 import java.util.List;
 
@@ -37,13 +41,13 @@ public class CampaignCreationPage {
     @FindBy(xpath = "//a[@class='icon-bars sidebar-toggle']")
     private WebElement menubar;
 
-    @FindBy(xpath = "//span[text()='Campaigns']")
+    @FindBy(xpath = "//li[@id='menu-li-campaign-campaign']//span[text()='Campaigns']")
     private WebElement campaignmodule;
 
     @FindBy(xpath = "//h4[text()='Campaigns']")
     private WebElement campaigntxtdisplay;
 
-    @FindBy(xpath = "//span[text()='Create Campaign']")
+    @FindBy(xpath = "//button[@class='btn btn-primary ng-star-inserted']//span[text()='Create Campaign']")
     private WebElement CreateCampaignbtn;
 
 
@@ -56,18 +60,16 @@ public class CampaignCreationPage {
     @FindBy(xpath = "(//input[@placeholder='DD/MM/YYYY'])[2]")
     private WebElement enddateopen;
 
-    @FindBy(xpath = "//p-select[@placeholder='Select state']")
-    private WebElement statedrp;
-    @FindBy(xpath = "//p-select[@placeholder='Select region']")
-    private WebElement regiondrp;
-    @FindBy(xpath = "//p-select[@placeholder='Select city']")
-    private WebElement citydrp;
-    @FindBy(xpath = "(//p-select[@placeholder='Select area'])[2]")
-    private WebElement areadrp;
+
+
 
     @FindBy(xpath = "//input[@placeholder='Search Nearest Location']")
     private WebElement venuaddress;
 
+    //input[contains(@class,'map-search-address-bar')]
+
+
+    private By Venuaddressinputbox=By.xpath("//div//input[@placeholder='Search Nearest Location']");
 
     // Locator for autocomplete results
     private By venueOptions = By.xpath("//div[contains(@class,'pac-item')]");
@@ -75,44 +77,76 @@ public class CampaignCreationPage {
     @FindBy(xpath = "//button[@class='btn btn-default my-location ng-star-inserted']")
     private WebElement mylocationbtn;
 
-    @FindBy(xpath = "(//button[@class='btn btn-primary ng-star-inserted'])[3]")
+    @FindBy(xpath = "//div//button[@id='btnNxt']//span[contains(text(),'Next')]")
     private WebElement nextbtn;
 
-    By stateoptions = By.xpath("//ul[@role='listbox']//li[@class='p-ripple p-select-option']");
-    By regionoptions = By.xpath("//ul[@role='listbox']//li[@class='p-ripple p-select-option']");
-    By cityoptions = By.xpath("//ul[@role='listbox']//li[@class='p-ripple p-select-option']");
-    By areaoptions = By.xpath("//ul[@class='p-select-list ng-star-inserted']//li[@class='p-ripple p-select-option']");
+    private By nextbtnby=By.xpath("//div//button[@id='btnNxt']//span[contains(text(),'Next')]");
+
+
+
+
+    //radio locators
+
+    @FindBy(xpath = "   //div[@class='form-group zc-field-radio'][.//span[contains(text(),'Time Bound Campaign')]]")
+    private WebElement TimeBoundCampaignlabel;
+
+    @FindBy(xpath = "//div[@class='form-group zc-field-radio'][.//span[contains(text(),'Share Venue Contact Info')]]")
+    private WebElement ShareVenueContactinfolabel;
+
+
+    @FindBy(xpath = "//div[@class='form-group zc-field-radio'][.//span[contains(text(),'Medium')]]")
+    private WebElement mediumlabel;
+
+
+
+    public boolean iscalenderfieldsvisible(){
+        try {
+            return startdateopen.isDisplayed();
+        }
+        catch (Exception e){
+            return  false;
+
+        }
+
+    }
+
+    public void waitForVenueInputVisible() {
+        wait.waitForVisibilityBy(Venuaddressinputbox);
+    }
+
+
+
     //calender
-    private By Monthtextlocator = By.xpath("//button[@class='current ng-star-inserted']");private By yeartextlocator = By.xpath("//button[@class='current']");
+
+    private By Monthtextlocator = By.xpath("//button[@class='current ng-star-inserted']");
+    private By yeartextlocator = By.xpath("//button[@class='current']");
     private By alldates = By.xpath("//td[@role='gridcell']");
     private By startnext = By.xpath("//button[@class='next']");
     private By startprevious = By.xpath("//button[@class='previous']");
 
-    @FindBy(xpath = "//button[@class='close']")private WebElement closeform;
+    @FindBy(xpath = "//div//button[@class='close']")private WebElement closeform;
 
 
     //TARGETS
-    @FindBy(xpath = "//button[@title='add more']")
-    private WebElement addmorebtn;
-    @FindBy(xpath = "//p-select[@placeholder='Select job role']")
-    private WebElement jobroledrp;
-    @FindBy(xpath = "//input[@placeholder='Enter target no. of hires']")
-    private WebElement targetnohires;
+    @FindBy(xpath = "//p-select[@placeholder='Select source type']//span[@id='source_type_uid']")
+    private WebElement sourcetypedrp;
 
-    By jobroleotions = By.xpath("//ul[@role='listbox']//li[@class='p-ripple p-select-option']");
+    private By sourcetypeoptions=By.xpath("//p-selectitem//li[@role='option']");
 
-    @FindBy(xpath = "//button[@title='btnAdd']")
-    private WebElement targetaddbtn;
+    @FindBy(xpath="//input[@role='searchbox']")private WebElement searchinputforsoucetypeoptions;
 
-    @FindBy(xpath = "(//button[@title='Next'])[2]")
+
+
+
+    @FindBy(xpath = "//button[@id='btnNext']")
     private WebElement targetnextbtn;
 
     //notes
     @FindBy(xpath = "//textarea[@placeholder='Enter notes']")
     private WebElement notes;
 
-    @FindBy(xpath = "//button[@title='Save & Continue']")
-    private WebElement saveandcontinubtn;
+    @FindBy(xpath = "//zc-button//div//button[@id='btnSave']")
+    private WebElement saveandcontinubuttonn;
 
 
     private By toastMsg = By.xpath("//div[contains(@class, 'toast-message') and contains(@class, 'ng-star-inserted')]");
@@ -165,14 +199,9 @@ public class CampaignCreationPage {
         }
     }
 
-    public void createcampaign(String camname, String code, String state, String region, String city, String area) {
-        wait.waitForEnterText(campname, camname);
+    public void createcampaign(String campaignname, String code) {
+        wait.waitForEnterText(campname, campaignname);
         wait.waitForEnterText(campcode, code);
-        Dropdownutils.selectbyvisibletextlistretry(driver, statedrp, stateoptions, state);
-        Dropdownutils.selectbyvisibletextlistretry(driver, regiondrp, regionoptions, region);
-        Dropdownutils.selectbyvisibletextlistretry(driver, citydrp, cityoptions, city);
-        Dropdownutils.selectbyvisibletextlistretry(driver, areadrp, areaoptions, area);
-
     }
 
     public void startdate(String month, String year, String date) {
@@ -196,50 +225,117 @@ public class CampaignCreationPage {
         }
 
     }
+//    public void selectVenue(String venueText)  {
+//        WebElement input = wait.waitForVisibility(venuaddress);
+//        input.click();
+//        input.sendKeys(venueText);
+//        input.sendKeys(Keys.SPACE);
+//        input.sendKeys(Keys.BACK_SPACE);
+//
+//        try {
+//           new WebDriverWait(driver, Duration.ofSeconds(30))
+//                    .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(venueOptions));
+//
+//            input.sendKeys(Keys.ARROW_DOWN);
+//            input.sendKeys(Keys.ENTER);
+//
+//
+//        } catch (TimeoutException e) {
+//
+//            System.out.println("No venue suggestions appeared, pressing ENTER directly");
+//            input.sendKeys(Keys.BACK_SPACE);
+//            input.sendKeys(Keys.ARROW_DOWN);
+//            input.sendKeys(Keys.ENTER);
+//        }
+//    }
 
     public void selectVenue(String venueText) {
+
         WebElement input = wait.waitForVisibility(venuaddress);
         input.click();
+        input.clear();
+
         input.sendKeys(venueText);
+        input.sendKeys(Keys.SPACE);
 
         try {
-            new WebDriverWait(driver, Duration.ofSeconds(5))
-                    .until(ExpectedConditions.visibilityOfElementLocated(venueOptions));
+            WebElement option = new WebDriverWait(driver, Duration.ofSeconds(20))
+                    .until(ExpectedConditions.elementToBeClickable(venueOptions));
 
-            input.sendKeys(Keys.ARROW_DOWN);
-            input.sendKeys(Keys.ENTER);
+            option.click();
+
+            js.executeScript("arguments[0].blur();", input);
+
+            new WebDriverWait(driver, Duration.ofSeconds(10))
+                    .until(driver -> (Boolean) js.executeScript(
+                            "return document.body.scrollHeight > window.innerHeight;"
+                    ));
 
         } catch (TimeoutException e) {
-
-            System.out.println("No venue suggestions appeared, pressing ENTER directly");
-            input.sendKeys(Keys.BACK_SPACE);
-            input.sendKeys(Keys.ARROW_DOWN);
-            input.sendKeys(Keys.ENTER);
+            input.sendKeys(venueText);
+            input.sendKeys(Keys.SPACE);
+            wait.waitForClickabilityBy(venueOptions).click();
+           // input.sendKeys(Keys.ENTER);
         }
     }
 
-    // ===== Medium selection =====
-    public void handleMedium(String medium, String venueText) {
-        boolean selected = rd.selectRadioButtonOption("Medium", medium);
-        if (!selected) {
-            throw new RuntimeException("Failed to select Medium: " + medium);
+
+
+    public void clickSaveAndContinue(){
+
+        clickElement(saveandcontinubuttonn);
+    }
+
+
+    //  radio button selector
+
+    public boolean selectRadioButtonOption(String labelText, String optionText) {
+        try {
+            String xpath = "//div[@class='form-group zc-field-radio'][.//span[contains(text(),'" + labelText + "')]]";
+
+            WebElement radioGroup = wait.waitForVisibility(driver.findElement(By.xpath(xpath)));
+
+            List<WebElement> options = radioGroup.findElements(By.xpath(".//label[contains(@class,'custom-radio')]"));
+
+            for (WebElement option : options) {
+                if (option.getText().trim().equalsIgnoreCase(optionText)) {
+
+                    WebElement button = option.findElement(By.tagName("input"));
+
+                    js.executeScript("arguments[0].scrollIntoView({block:'center'});", option);
+
+                    clickElement(option);
+
+                    return button.isSelected();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Radio selection error: " + e.getMessage());
         }
+        return false;
+    }
 
-        switch (medium.toLowerCase()) {
-            case "offline":
 
-                selectVenue(venueText);
-                break;
+    //   common click
+    private void clickElement(WebElement element) {
+        try {
+            wait.waitForClickability(element);
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", element);
 
-            case "online":
-                System.out.println("Online selected, venue not required");
-                break;
+            try {
+                element.click();
+            } catch (ElementClickInterceptedException e) {
+                js.executeScript("arguments[0].click();", element);
+            }
 
-            default:
-                throw new IllegalArgumentException("Invalid medium: " + medium);
+        } catch (Exception e) {
+            js.executeScript("arguments[0].click();", element);
         }
     }
 
+
+
+     //Mylocation
     public void useMyLocation() {
 
         try {
@@ -251,52 +347,71 @@ public class CampaignCreationPage {
     }
 
 
-    public void clicknext() {
-        scrollToBottom();
-        try {
+    public void selectfromsourcetype(String value){
+         try {
+             WebElement ele= wait.waitForVisibility(sourcetypedrp);
 
-            WebElement nxt = wait.waitForClickability(nextbtn);
-            if (nxt != null && nxt.isDisplayed())
-                nxt.click();
-        } catch (Exception e) {
-            js.executeScript("arguments[0].click();", nextbtn);
-        }
-
-    }
-    public void scrollToBottom() {
-        try {
-            js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-        } catch (Exception e) {
-            js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
-        }
+             Dropdownutils.selectPrimeNgDropdown(driver, sourcetypedrp, sourcetypeoptions, value);
+         } catch (Exception e) {
+             throw new RuntimeException(e);
+         }
     }
 
-    public void addmorebtn() {
+//    public void clickNext() {
+//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+//        JavascriptExecutor js = (JavascriptExecutor) driver;
+//
+//        try {
+//            WebElement nextBtn = wait.until(
+//                    ExpectedConditions.presenceOfElementLocated(nextbtnby)
+//            );
+//
+//            js.executeScript(
+//                    "window.scrollTo(0, arguments[0].getBoundingClientRect().top + window.pageYOffset - 120);",
+//                    nextBtn
+//            );
+//
+//            nextBtn = wait.until(
+//                    ExpectedConditions.elementToBeClickable(nextbtnby)
+//            );
+//
+//            nextBtn.click();
+//
+//        } catch (Exception e) {
+//            WebElement nextBtn = driver.findElement(nextbtnby);
+//            js.executeScript("arguments[0].click();", nextBtn);
+//        }
+//    }
+//
+
+    public void clickNext() {
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
         try {
-            WebElement ad = wait.waitForVisibility(addmorebtn);
-            ad.click();
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                    By.cssSelector(".pac-container")
+            ));
+
+            WebElement nextBtn = wait.until(
+                    ExpectedConditions.presenceOfElementLocated(nextbtnby)
+            );
+
+            js.executeScript(
+                    "window.scrollTo(0, arguments[0].getBoundingClientRect().top + window.pageYOffset - 120);",
+                    nextBtn
+            );
+
+            wait.until(ExpectedConditions.elementToBeClickable(nextbtnby)).click();
+
         } catch (Exception e) {
-            js.executeScript("arguments[0].click();", addmorebtn);
-
+            WebElement nextBtn = driver.findElement(nextbtnby);
+            js.executeScript("arguments[0].click();", nextBtn);
         }
-
     }
 
-    public void targetsection(String jobrole, String noofhires) {
 
-        Dropdownutils.selectbyvisibletextlistretry(driver, jobroledrp, jobroleotions, jobrole);
-        wait.waitForEnterText(targetnohires, noofhires);
 
-        try {
-            WebElement ele = wait.waitForClickability(targetaddbtn);
-            if (ele != null && ele.isDisplayed())
-                ele.click();
-        } catch (Exception e) {
-            js.executeScript("arguments[0].click();", targetaddbtn);
-
-        }
-
-    }
 
     public void addtargetnextbtn() {
         try {
@@ -315,12 +430,12 @@ public class CampaignCreationPage {
 
         try {
 
-            WebElement savebtn = wait.waitForClickability(saveandcontinubtn);
+            WebElement savebtn = wait.waitForClickability(saveandcontinubuttonn);
 
             if (savebtn != null && savebtn.isDisplayed())
                 savebtn.click();
         } catch (Exception e) {
-            js.executeScript("arguments[0].click();", saveandcontinubtn);
+            js.executeScript("arguments[0].click();", saveandcontinubuttonn);
         }
 
 

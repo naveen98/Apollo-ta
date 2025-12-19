@@ -29,24 +29,24 @@ public class VacancyEditandDeletePage {
     @FindBy(xpath = "//a[@mattooltip='Click to toggle Menu']")
     private WebElement menubar;
 
-    @FindBy(xpath = "//span[text()='Vacancy']")
+    @FindBy(xpath = "//li[@id='menu-li-vacancy-vacancy'] //span[text()='Vacancies']")
     private WebElement clickvacancymodule;
 
 
-    @FindBy(xpath="//input[@placeholder='Search Site / Job Role / No Of Vacancies / Closed Vacancies']")private WebElement searchbox;
+    @FindBy(xpath="//input[@placeholder='Search Site / Job Role / No Of Vacancies ']")private WebElement searchbox;
 
     @FindBy(xpath="//button[@class='btn btn-primary filter-clear-btn zc-global-search-btn ng-star-inserted']")private WebElement searchbutton;
 
     @FindBy(xpath = "//div[@class='zc-form-add-btn for-row ng-star-inserted']//i[@class='icon-edit ui-clickable ng-star-inserted']")
     private WebElement editoption;
 
-    @FindBy(xpath = "//input[@id='no_of_vacancies']")
+    @FindBy(xpath = "//input[@placeholder='Enter no of vacancies']")
     private WebElement Noofvacancies;
 
     @FindBy(xpath = "//input[@id='closed_vacancies']")
     private WebElement NoofaClosedvacancies;
 
-    @FindBy(xpath = "//button[@class='btn ml-1 btn-primary ng-star-inserted']")private WebElement updatebutton;
+    @FindBy(xpath = "//button[@id='button']//span[contains(text(),'Update')]")private WebElement updatebutton;
     @FindBy(xpath = "//button[@title='Close']")private WebElement cancelform;
     private final By popupMessageLocator = By.xpath("//div[contains(@class,'modal-body') and contains(text(),'Please enter all the mandatory fields before saving.')]");
 
@@ -60,8 +60,8 @@ public class VacancyEditandDeletePage {
 
     @FindBy(xpath = "//div[@class='zc-form-add-btn for-row ng-star-inserted']//i[@class='icon-delete ui-clickable ng-star-inserted']") private WebElement Deleteoption;
 
-    private final By popupMsg = By.xpath("//div[@class='modal-body' and text()='Do you want to delete vacancy?']");
-    private final By toastpopupmsgs = By.xpath("//div[@role='alert' and contains(@class, 'toast-message')] | //div[@class='modal-body' and text()='Do you want to delete vacancy?']");
+    private final By DelpopupMsg = By.xpath("//div[@class='modal-body' and starts-with(normalize-space(), 'Do you want to delete')]");
+    private final By toastpopupmsgs = By.xpath("//div[@role='alert' and contains(@class, 'toast-message')] | //div[@class='modal-body' and starts-with(normalize-space(), 'Do you want to delete')]");
 
     private final By noVacancyMessage = By.xpath("//td[contains(text(), 'No vacancies found')]");
 
@@ -111,33 +111,23 @@ public class VacancyEditandDeletePage {
 
     public void clickeditbutton() {
         try {
-
-            WebElement present = wait.waitForVisibilityBy(noVacancyMessage);
-            if (present != null && present.isDisplayed()) {
-                System.out.println("No record found, skipping edit.");
-                return;
-            }
-        } catch (Exception ignore) {
-
-        }
-
-        try {
             WebElement edit = wait.waitForClickability(editoption);
             if (edit != null && edit.isDisplayed()) {
                 edit.click();
             }
+
         } catch (Exception e) {
             js.executeScript("arguments[0].click();", editoption);
         }
     }
 
 
-    public void editvacancy(String noofvacancy,String noofclosedvacancy)
+    public void editvacancy(String noofvacancy)
     {
            try{
 
                wait.waitForEnterText(Noofvacancies,noofvacancy);
-               wait.waitForEnterText(NoofaClosedvacancies,noofclosedvacancy);
+
 
            } catch (Exception e) {
                System.out.println("Error : "+ e.getMessage());
@@ -157,6 +147,15 @@ public class VacancyEditandDeletePage {
 
         }
     }
+
+    public boolean isNoRecordFoundDisplayedFast() {
+        try {
+            return driver.findElements(By.xpath("//td[contains(text(),'No vacancies found')]")).size() > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 
 
     public String getvalidationmessage() {
@@ -207,7 +206,7 @@ public class VacancyEditandDeletePage {
 
     public boolean handlePopupOK() {
         try {
-            WebElement popupMsg = wait.waitForVisibilityBy(popupMessageLocator);
+            WebElement popupMsg = wait.waitForVisibilityBy(DelpopupMsg);
             if (popupMsg != null && popupMsg.isDisplayed()) {
                 WebElement okBtn = wait.waitForClickability(popupOkButton);
 
@@ -251,23 +250,13 @@ public class VacancyEditandDeletePage {
     }
 
     public void clickdelete() {
-        try {
-            // Check if No vacancies found
-            WebElement present = wait.waitForVisibilityBy(noVacancyMessage);
-            if (present != null && present.isDisplayed()) {
-                System.out.println("No record found, skipping delete.");
-                return;
-            }
-        } catch (Exception ignore) {
-
-        }
 
         try {
             WebElement del = wait.waitForClickability(Deleteoption);
             if (del != null && del.isDisplayed()) {
                 del.click();
 
-                WebElement pop = wait.waitForVisibilityBy(popupMsg);
+                WebElement pop = wait.waitForVisibilityBy(DelpopupMsg);
                 if (pop != null && pop.isDisplayed()) {
                     handlePopupdelete();
                 }

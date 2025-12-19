@@ -381,6 +381,112 @@ public class Dropdownutils {
 
     }
 
+
+    //=================retry with by==============
+    public static void selectbyvisibletextlistretryBy(WebDriver driver, By drplocator, By listlocator, String visibleText) {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        try {
+            // Click drop down
+            try {
+                wait.until(ExpectedConditions.visibilityOfElementLocated(drplocator));
+
+                wait.until(ExpectedConditions.elementToBeClickable(drplocator)).click();
+
+            } catch (Exception e) {
+
+                js.executeScript("arguments[0].click();", drplocator);
+            }
+
+
+            boolean found = false;
+
+            int retries = 0;
+
+
+            while (!found && retries < 3) {
+                try {
+
+                    List<WebElement> options = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(listlocator));
+
+                    for (WebElement option : options) {
+                        String text = option.getText().trim();
+                        if (text.equalsIgnoreCase(visibleText.trim())) {
+                            js.executeScript("arguments[0].scrollIntoView({block: 'center'});", option);
+                            wait.until(ExpectedConditions.elementToBeClickable(option)).click();
+                            found = true;
+                            break;
+                        }
+                    }
+                    break;
+                } catch (Exception ee) {
+                    retries++;
+                }
+            }
+
+            if (!found) {
+                System.out.println("Dropdown option not found: " + visibleText);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Dropdown selection failed: " + e.getMessage());
+        }
+
+
+    }
+//=================================================================================
+
+    public static void selectPrimeNgDropdown(WebDriver driver, WebElement dropdown, By optionsLocator, String value) {
+
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        try {
+            // Scroll dropdown into view
+            js.executeScript("arguments[0].scrollIntoView({block:'center'});", dropdown);
+            Thread.sleep(300);
+
+            // Try normal click
+            try {
+                dropdown.click();
+            } catch (Exception e) {
+                // Fallback to JS click
+                js.executeScript("arguments[0].click();", dropdown);
+            }
+
+            // Wait for options to become visible
+            List<WebElement> options = wait.until(
+                    ExpectedConditions.visibilityOfAllElementsLocatedBy(optionsLocator)
+            );
+
+            for (WebElement option : options) {
+                if (option.getText().trim().equalsIgnoreCase(value)) {
+
+                    js.executeScript("arguments[0].scrollIntoView({block:'center'});", option);
+
+                    try {
+                        option.click();
+                    } catch (Exception e) {
+                        js.executeScript("arguments[0].click();", option);
+                    }
+
+                    System.out.println("Selected dropdown value: " + value);
+                    return;
+                }
+            }
+
+            throw new RuntimeException("Value not found in dropdown: " + value);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to select dropdown value: " + value + " due to: " + e.getMessage());
+        }
+    }
+
+
+
+
+
     //--------------dropdown with search------------------------------------------------
     public static void selectDropdownWithSearch(WebDriver driver,
                                                 WebElement dropdownElement,

@@ -26,6 +26,10 @@ public class Webdriverwaitutils {
 	        return wait.until(ExpectedConditions.elementToBeClickable(element));
 	    }
 
+    public WebElement waitForClickabilityBy(By element) {
+        return wait.until(ExpectedConditions.elementToBeClickable(element));
+    }
+
 	   
 	    public WebElement waitForPresence(By locator) {
 	        return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
@@ -73,7 +77,26 @@ public class Webdriverwaitutils {
 	    }
 
 
-	    public WebElement clickElement(WebElement locator) {
+    public WebElement waitForVisibilityWithRetry(By locator) {
+
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+            for (int i = 0; i < 3; i++) {
+                try {
+                    return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+                } catch (StaleElementReferenceException | TimeoutException e) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException ignored) {}
+                }
+            }
+            throw new TimeoutException("Element not visible after retries: " + locator);
+        }
+
+
+
+
+        public WebElement clickElement(WebElement locator) {
 	    	  
 	          WebElement element= wait.until(ExpectedConditions.elementToBeClickable(locator));
 	          JavascriptExecutor js=(JavascriptExecutor)driver;
@@ -81,6 +104,9 @@ public class Webdriverwaitutils {
 	         js.executeScript("arguments[0].click();", element);
 	         return element;
 	     }
+
+
+
 	    public void waitForElementToBeClickable(WebElement locator) {
 	        wait.until(ExpectedConditions.elementToBeClickable(locator));
 	    }
@@ -123,5 +149,27 @@ public class Webdriverwaitutils {
         wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
 		
+
+
+    //------------------Retry logic for search------------------
+    public void retryClearAndType(By locator, String text) {
+        int attempts = 0;
+
+        while (attempts < 5) {
+            try {
+                WebElement el = waitForVisibility(driver.findElement(locator));
+                el.clear();
+                el.sendKeys(text);
+                return;  // success
+            } catch (StaleElementReferenceException e) {
+                System.out.println("Retrying due to stale element...");
+            }
+            attempts++;
+
+
+        }
+        throw new RuntimeException(" Failed after retries due to stale element: " + locator);
+    }
+
 
 }

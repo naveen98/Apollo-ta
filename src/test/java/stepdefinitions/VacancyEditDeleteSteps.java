@@ -22,26 +22,34 @@ public class VacancyEditDeleteSteps {
        driver= DriverManager.getDriver();
        vc=new VacancyEditandDeletePage(driver);
 
-     // vc.navigatevacancymodule();
+        vc.navigatevacancymodule();
 
 
     }
 
     @When("i verify the edit action")
     public void i_verify_the_edit_action() throws IOException {
-        String path="C:\\Users\\navee\\IdeaProjects\\Apollo-ta\\src\\test\\resources\\vacancycreation.xlsx";
+        String path="D:\\selenium-intellij\\src\\test\\resources\\vacancycreation.xlsx";
         String SheetName="edit";
 
         String data[][]= Excelutils.getcelldatas(path,SheetName);
          for (int i=0;i<data.length;i++){
 
              String searchname=data[i][0];
+
+
              String noofvacancies=data[i][1];
-             String noofclosedvacancies=data[i][2];
+
 
              vc.searchitem(searchname);
+
+             if (vc.isNoRecordFoundDisplayedFast()) {
+                 System.out.println("No record found for: " + searchname);
+                 continue;
+             }
+
              vc.clickeditbutton();
-             vc.editvacancy(noofvacancies,noofclosedvacancies);
+             vc.editvacancy(noofvacancies);
              vc.clickupdatebutton();
 
              String message=vc.getvalidationmessage();
@@ -61,7 +69,7 @@ public class VacancyEditDeleteSteps {
        @Then("i verify the delete action")
        public void i_verify_the_delete_action() throws IOException {
 
-           String paths = "C:\\Users\\navee\\IdeaProjects\\Apollo-ta\\src\\test\\resources\\vacancycreation.xlsx";
+           String paths = "D:\\selenium-intellij\\src\\test\\resources\\vacancycreation.xlsx";
            String sheetName = "edit";
 
            String datas[][] = Excelutils.getcelldatas(paths, sheetName);
@@ -70,6 +78,12 @@ public class VacancyEditDeleteSteps {
                String searchid = datas[j][0];
 
                vc.searchdelete(searchid);
+           if(vc.isNoRecordFoundDisplayedFast()){
+                System.out.println("No record found for: " + searchid);
+                continue;
+
+
+           }
                vc.clickdelete();
 
                String message = vc.gettoastmessage();

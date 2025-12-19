@@ -27,16 +27,16 @@ public class RecruitmentSourcingPage {
     @FindBy(xpath = "//a[@mattooltip='Click to toggle Menu']")
     private WebElement menubar;
 
-    @FindBy(xpath = "//span[text()='Sourcing']")
+    @FindBy(xpath = "//a[@class='nav-link nav-dropdown-toggle']//span[text()='Sourcing']")
     private WebElement sourcingmodule;
 
     @FindBy(xpath = "(//li[@id='menu-li-sourcing-recrtmnt-score-config'])[2]")
     private WebElement recruitmentscoring;
 
-    @FindBy(xpath = "//button[@class='btn btn-primary']")
+    @FindBy(xpath = "//div//button[@class='btn btn-primary ng-star-inserted']//span[contains(text(),'Add Scoring')]")
     private WebElement addsourcingbutton;
 
-    @FindBy(xpath = "//input[@placeholder='Enter source type']")
+    @FindBy(xpath = "//zc-text//input[@id='source_type']")
     private WebElement sourcetypeinput;
 
     @FindBy(xpath = "(//input[@placeholder='Enter sourcing effort'])[1]")
@@ -154,9 +154,6 @@ public class RecruitmentSourcingPage {
                             cancelform();
                             return "Mandatory fields missing";
 
-                        default:
-                            cancelform();
-                            return message;
                     }
                 }
             } else {

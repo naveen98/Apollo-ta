@@ -18,7 +18,6 @@ public class RecruiterRankingSteps {
      driver= DriverManager.getDriver();
      rp=new RecruiterRankingpage(driver);
 
-
        rp.navigatetorecruitmentsourcing();
 
     }

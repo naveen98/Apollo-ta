@@ -23,7 +23,7 @@ public class RecruitmentSourcingSteps {
 
     @Then("i add scoring from excel sheet")
     public void i_add_scoring_from_excel_sheet() throws IOException {
-        String path = "C:\\Users\\navee\\IdeaProjects\\Apollo-ta\\src\\test\\resources\\recruitmentsourcing.xlsx";
+        String path = "D:\\selenium-intellij\\src\\test\\resources\\recruitmentsourcing.xlsx";
         String sheetname = "sourcing";
 
         String[][] data = Excelutils.getcelldatas(path, sheetname);
@@ -53,6 +53,7 @@ public class RecruitmentSourcingSteps {
                 System.out.println("Successfully saved: " + message);
 
             } else {
+                rp.cancelform();
                 System.out.println("Failed to save: " + message);
             }
         }

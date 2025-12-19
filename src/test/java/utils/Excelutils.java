@@ -2,173 +2,215 @@ package utils;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 public class Excelutils {
 
-	public static FileInputStream fis;
-	public static FileOutputStream fos;
-	public static Workbook wb;
-	public static Sheet sh;
-	public static Row row;
-	public static Cell col;
+    public static FileInputStream fis;
+    public static FileOutputStream fos;
+    public static Workbook wb;
+    public static Sheet sh;
+    public static Row row;
+    public static Cell col;
 
-	public static int getrowcount(String xlfilepath, String xlsheet) throws Throwable {
-		fis = new FileInputStream(xlfilepath);
-		wb = WorkbookFactory.create(fis);
-		sh = wb.getSheet(xlsheet);
-		int rowcount = sh.getLastRowNum();
-		wb.close();
-		fis.close();
-		return rowcount;
+    public static int getrowcount(String xlfilepath, String xlsheet) throws Throwable {
+        fis = new FileInputStream(xlfilepath);
+        wb = WorkbookFactory.create(fis);
+        sh = wb.getSheet(xlsheet);
+        int rowcount = sh.getLastRowNum();
+        wb.close();
+        fis.close();
+        return rowcount;
 
-	}
+    }
 
-	public static int getcellcount(String xlfilepath, String xlsheet, int rownum) throws Throwable {
-		fis = new FileInputStream(xlfilepath);
-		wb = WorkbookFactory.create(fis);
-		sh = wb.getSheet(xlsheet);
-		row = sh.getRow(rownum);
-		int cellcount = row.getLastCellNum();
-		wb.close();
-		fis.close();
-		return cellcount;
+    public static int getcellcount(String xlfilepath, String xlsheet, int rownum) throws Throwable {
+        fis = new FileInputStream(xlfilepath);
+        wb = WorkbookFactory.create(fis);
+        sh = wb.getSheet(xlsheet);
+        row = sh.getRow(rownum);
+        int cellcount = row.getLastCellNum();
+        wb.close();
+        fis.close();
+        return cellcount;
 
-	}
+    }
 
-	public static String getcelldata(String xlfilepath, String xlsheet, int rownum, int colnum) throws Throwable {
+    public static String getcelldata(String xlfilepath, String xlsheet, int rownum, int colnum) throws Throwable {
 
-		fis = new FileInputStream(xlfilepath);
-		wb = WorkbookFactory.create(fis);
-		sh = wb.getSheet(xlsheet);
-		row = sh.getRow(rownum);
-		col = row.getCell(colnum);
-		String data;
-		try {
-			DataFormatter formatter = new DataFormatter();
-			String celldata = formatter.formatCellValue(col);
-			return celldata;
+        fis = new FileInputStream(xlfilepath);
+        wb = WorkbookFactory.create(fis);
+        sh = wb.getSheet(xlsheet);
+        row = sh.getRow(rownum);
+        col = row.getCell(colnum);
+        String data;
+        try {
+            DataFormatter formatter = new DataFormatter();
+            String celldata = formatter.formatCellValue(col);
+            return celldata;
 
-		} catch (Exception e) {
+        } catch (Exception e) {
 
-			data = "";
+            data = "";
 
-		}
-		wb.close();
-		fis.close();
-		return data;
+        }
+        wb.close();
+        fis.close();
+        return data;
 
-	}
+    }
 
-	public static void setcelldata(String xlfilepath, String xlsheet, int rownum, int colnum, String data)
-			throws Throwable {
-		fis = new FileInputStream(xlfilepath);
-		wb = WorkbookFactory.create(fis);
-		sh = wb.getSheet(xlsheet);
-		row = sh.getRow(rownum);
-		if (row == null) {
-			row = sh.createRow(rownum);
-		}
+    public static void setcelldata(String xlfilepath, String xlsheet, int rownum, int colnum, String data)
+            throws Throwable {
+        fis = new FileInputStream(xlfilepath);
+        wb = WorkbookFactory.create(fis);
+        sh = wb.getSheet(xlsheet);
+        row = sh.getRow(rownum);
+        if (row == null) {
+            row = sh.createRow(rownum);
+        }
 
-		col = row.getCell(colnum);
-		if (col == null) {
-			col = row.createCell(colnum);
-		}
-		col.setCellValue(data);
-		fis.close();
+        col = row.getCell(colnum);
+        if (col == null) {
+            col = row.createCell(colnum);
+        }
+        col.setCellValue(data);
+        fis.close();
 
-		fos = new FileOutputStream(xlfilepath);
-		wb.write(fos);
-		wb.close();
-		fos.close();
+        fos = new FileOutputStream(xlfilepath);
+        wb.write(fos);
+        wb.close();
+        fos.close();
 
-	}
-	public static String[][] getcelldatas(String xlfilepath, String sheetname) throws IOException {
+    }
 
-		fis = new FileInputStream(xlfilepath);
+    public static String[][] getcelldatas(String xlfilepath, String sheetname) throws IOException {
 
-		wb = WorkbookFactory.create(fis);
+        fis = new FileInputStream(xlfilepath);
 
-		sh = wb.getSheet(sheetname);
+        wb = WorkbookFactory.create(fis);
 
-		int totalrow = sh.getPhysicalNumberOfRows();
+        sh = wb.getSheet(sheetname);
 
-		int totalcols = sh.getRow(0).getLastCellNum();
+        int totalrow = sh.getPhysicalNumberOfRows();
 
-		DataFormatter formatter = new DataFormatter();
+        int totalcols = sh.getRow(0).getLastCellNum();
 
-		String data[][] = new String[totalrow - 1][totalcols];
+        DataFormatter formatter = new DataFormatter();
 
-		for (int i = 1; i < totalrow; i++) {
+        String data[][] = new String[totalrow - 1][totalcols];
 
-			Row row = sh.getRow(i);
-			
-			if (row == null) {
+        for (int i = 1; i < totalrow; i++) {
 
-				for (int j = 0; j < totalcols; j++) {
+            Row row = sh.getRow(i);
 
-					data[i - 1][j] = "";
-				}
-				continue;
-			}
-			for (int j = 0; j < totalcols; j++) {
+            if (row == null) {
 
-				Cell col = row.getCell(j);
+                for (int j = 0; j < totalcols; j++) {
 
-				data[i - 1][j] = (col != null) ? formatter.formatCellValue(col) : "";
+                    data[i - 1][j] = "";
+                }
+                continue;
+            }
+            for (int j = 0; j < totalcols; j++) {
 
-			}
-		}
-		fis.close();
-		return data;
+                Cell col = row.getCell(j);
 
-	}
-	
-	
-	
-	//excel write data
-	public static void writecelldatas(String xlfilepath, String sheetname, int rownum, int cellnum, String data)
-			throws EncryptedDocumentException, IOException {
-		
+                data[i - 1][j] = (col != null) ? formatter.formatCellValue(col) : "";
 
-		fis = new FileInputStream(xlfilepath);
-		wb = WorkbookFactory.create(fis);
-	    sh=wb.getSheet(sheetname);
-	
-	    
-	    Row row= sh.getRow(rownum);
-	    
-	    if(row==null) {
-	    	
-	    
-	    row=sh.createRow(rownum);
-	    
-	    }
-	    
-	
+            }
+        }
+        fis.close();
+        return data;
 
-	    Cell cell=row.getCell(cellnum);
-	    
-	    if(cell==null) {
-	    	
-	    	cell=row.createCell(cellnum);
-	    }
-	    cell.setCellValue(data);
-	    
-	        
-	      
-	    
-	    FileOutputStream fos = new FileOutputStream(xlfilepath);
-	    wb.write(fos);
-	    fos.close();
-
-	    
-	}
-	
+    }
 
 
+    //excel write data
+    public static void writecelldatas(String xlfilepath, String sheetname, int rownum, int cellnum, String data)
+            throws EncryptedDocumentException, IOException {
 
+
+        fis = new FileInputStream(xlfilepath);
+        wb = WorkbookFactory.create(fis);
+        sh = wb.getSheet(sheetname);
+
+
+        Row row = sh.getRow(rownum);
+
+        if (row == null) {
+
+
+            row = sh.createRow(rownum);
+
+        }
+
+
+        Cell cell = row.getCell(cellnum);
+
+        if (cell == null) {
+
+            cell = row.createCell(cellnum);
+        }
+        cell.setCellValue(data);
+
+
+        FileOutputStream fos = new FileOutputStream(xlfilepath);
+        wb.write(fos);
+        fos.close();
+
+
+    }
+//------------------------------------------------------write data------------------------------------------------------
+    // Write a single row to the Excel sheet
+
+    public static void writeTable(String filePath,
+                                  String sheetName,
+                                  String[] headers,
+                                  List<String[]> tableData) throws IOException {
+
+        Workbook wb;
+        File file = new File(filePath);
+
+        // Open or create Excel
+        if (file.exists()) {
+            wb = WorkbookFactory.create(new FileInputStream(file));
+        } else {
+            wb = new XSSFWorkbook();
+        }
+
+        // create sheet
+        Sheet sheet = wb.getSheet(sheetName);
+        if (sheet == null)
+
+            sheet = wb.createSheet(sheetName);
+
+        int rowIndex = 0;
+
+        // Write headers
+        Row headerRow = sheet.createRow(rowIndex++);
+        for (int i = 0; i < headers.length; i++) {
+            headerRow.createCell(i).setCellValue(headers[i]);
+        }
+
+        // Write table rows
+        for (String[] rowData : tableData) {
+            Row row = sheet.createRow(rowIndex++);
+            for (int i = 0; i < rowData.length; i++) {
+                row.createCell(i).setCellValue(rowData[i]);
+            }
+        }
+
+
+        FileOutputStream fos = new FileOutputStream(filePath);
+        wb.write(fos);
+        fos.close();
+        wb.close();
+    }
 }

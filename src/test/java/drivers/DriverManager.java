@@ -7,11 +7,13 @@ public class DriverManager {
 
     // Save browser
     public static void setDriver(WebDriver d) {
+
         driver = d;
     }
 
     // Get browser
     public static WebDriver getDriver() {
+
         return driver;
     }
 

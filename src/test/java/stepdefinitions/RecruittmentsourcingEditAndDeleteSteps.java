@@ -16,12 +16,12 @@ public class RecruittmentsourcingEditAndDeleteSteps {
     RecruittmentsourcingEditAndDeletePage ed;
 
 
-    @Given("i navigate to recruitment scourcing")
-    public void i_navigate_to_recruitment_scourcing(){
+    @Given("i navigate to recruitment sourcing")
+    public void i_navigate_to_recruitment_sourcing(){
 
         driver= DriverManager.getDriver();
         ed=new RecruittmentsourcingEditAndDeletePage(driver);
-        ed.navigatetorecruitmentsourcing();
+        //ed.navigatetorecruitmentsourcing();
 
 
     }
@@ -29,7 +29,7 @@ public class RecruittmentsourcingEditAndDeleteSteps {
     @When("i click on edit action")
     public void i_click_on_edit_action() throws IOException {
 
-         String path="C:\\Users\\navee\\IdeaProjects\\Apollo-ta\\src\\test\\resources\\recruitmentsourcing.xlsx";
+         String path="D:\\selenium-intellij\\src\\test\\resources\\recruitmentsourcing.xlsx";
          String sheetname="edit";
 
          String data[][]= Excelutils.getcelldatas(path,sheetname);

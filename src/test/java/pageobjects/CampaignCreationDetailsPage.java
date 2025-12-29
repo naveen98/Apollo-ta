@@ -39,7 +39,7 @@ public class CampaignCreationDetailsPage {
 
     //================= Date =================
 
-    @FindBy(xpath = "//table//tr//th[.//span[text()='Start Date']]")
+    @FindBy(xpath = "//th[.//span[normalize-space()='Start Date']]//i[contains(@class,'icon-angle-down')]")
     private WebElement startDateColumn;
 
     @FindBy(xpath = "//table//tr//th[.//span[text()='End Date']]")
@@ -79,8 +79,8 @@ public class CampaignCreationDetailsPage {
     // ================= Start Date =================
 
     public void selectStartDate(String month, String year, String date) {
-        openCalendar(startDateColumn);
-        dt.datepickers(monthText, yearText, prevBtn, nextBtn, allDates,
+         openCalendar(startDateColumn);
+         dt.datepickers(monthText, yearText, prevBtn, nextBtn, allDates,
                 month, year, date);
         dt.datepickers(monthText, yearText, prevBtn, nextBtn, allDates,
                 month, year, date);
@@ -101,7 +101,7 @@ public class CampaignCreationDetailsPage {
         safeClick(column);
 
         WebElement chooseDateBtn = column.findElement(
-                By.xpath(".//button[@aria-label='Choose Date']")
+                By.xpath("//p-datepicker//button[@aria-label='Choose Date']")
         );
         safeClick(chooseDateBtn);
     }

@@ -36,10 +36,10 @@ public class VacancycreationPage {
     @FindBy(xpath = "//button[contains(@class,'btn-primary')]//span[text()='Add']")
     private WebElement AddVacancycreationbutton;
 
-    @FindBy(xpath = "//p-autocomplete//input[@placeholder='Search site']")
+    @FindBy(xpath = "//zc-autocomplete//div//p-autocomplete//input[@placeholder='Search site']")
     private WebElement siteinput;
 
-    private final By siteoptions = By.xpath("//ul[@role='listbox']//li[@role='option']");
+    private final By siteoptions = By.xpath("//div//ul[@role='listbox']//li[@role='option']");
 
     @FindBy(xpath = "//input[@placeholder='MM/YYYY']")
     private WebElement dateopen;
@@ -201,12 +201,15 @@ public class VacancycreationPage {
                     System.out.println("Toast message: " + message);
 
                     switch (message) {
-                        case "Vacancy created successfully":
-
+                        case "Vacancy Saved Successfully":
                             return message;
 
                         case "Vacancy is already added to this month!":
                              closeForm();
+                            return message;
+
+                        case "Code already exists!":
+                           // closeForm();
                             return message;
 
                         case "Please enter all the mandatory fields before saving.":

@@ -57,17 +57,15 @@ public class VacancycreationSteps {
                 System.out.println("Final Result: " + msg);
 
 
-                if (msg.toLowerCase().contains("Created") || msg.toLowerCase().contains("successfully")) {
-                    System.out.println("Vacancy Created Successfully");
-                    Assert.assertTrue(true);
+                if (msg.toLowerCase().contains("saved") || msg.toLowerCase().contains("successfully")) {
+                    System.out.println("Vacancy Saved Successfully");
                     continue;
                 }else{
-                      vc.closeForm();
+                    vc.closeForm();
                     System.out.println("Vacancy Creation Failed");
 
                 }
-
-        }
+             }
         
             }
         }

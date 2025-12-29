@@ -26,17 +26,17 @@ public class ApplicationPage {
     //Locatiors
 
 
-    @FindBy(xpath = "//a[contains(@class,'sidebar-toggle')]")
+    @FindBy(xpath = "//div//a[contains(@class,'icon-bars sidebar-toggle')]")
     private WebElement menubar;
 
     @FindBy(xpath = "//li[@id='menu-li-candidate-candidate']//span[text()='Applications']")
     private WebElement applicationmodule;
 
-    @FindBy(xpath="//div//input[@class='ng-pristine ng-valid ng-touched']")private WebElement searchinputbox;
-    @FindBy(xpath="//button[@class='btn btn-primary filter-clear-btn zc-global-search-btn ng-star-inserted']")private WebElement searchbutton;
+    @FindBy(xpath="(//div[@class='ui-inputgroup ng-star-inserted']//input[@placeholder='Search '])[1]")private WebElement searchinputbox;
+    @FindBy(xpath="//div//button[@class='btn btn-primary filter-clear-btn zc-global-search-btn ng-star-inserted']//span[contains(text(),' Search')]")private WebElement searchbutton;
 
 
-    @FindBy(xpath="//p-table//table//tbody//tr")private WebElement applicationsrow;
+    @FindBy(xpath="//div//p-table//table//tbody//tr")private WebElement applicationsrow;
     @FindBy(xpath="//td[contains(text(),' No records found ')]")private WebElement norecordfound;
 
 
@@ -81,9 +81,8 @@ public class ApplicationPage {
         wait.waitForVisibility(applicationsrow);
 
         //  Get all rows
-        List<WebElement> rows = driver.findElements(By.xpath("//p-table//table//tbody//tr"));
+        List<WebElement> rows = driver.findElements(By.xpath("//div//p-table//table//tbody//tr"));
 
-        // Iterate row by row
         for (WebElement row : rows) {
 
             //  Get all columns in the current row

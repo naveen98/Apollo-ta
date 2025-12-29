@@ -21,7 +21,7 @@ public class RecruittmentsourcingEditAndDeleteSteps {
 
         driver= DriverManager.getDriver();
         ed=new RecruittmentsourcingEditAndDeletePage(driver);
-        //ed.navigatetorecruitmentsourcing();
+        ed.navigatetorecruitmentsourcing();
 
 
     }
@@ -73,7 +73,7 @@ public class RecruittmentsourcingEditAndDeleteSteps {
 
     @Then("i click on delete action")
     public void i_click_on_delete_action() throws IOException {
-        String path = "C:\\Users\\navee\\IdeaProjects\\Apollo-ta\\src\\test\\resources\\recruitmentsourcing.xlsx";
+        String path = "D:\\selenium-intellij\\src\\test\\resources\\recruitmentsourcing.xlsx";
         String sheetname = "edit";
 
         String data[][] = Excelutils.getcelldatas(path, sheetname);

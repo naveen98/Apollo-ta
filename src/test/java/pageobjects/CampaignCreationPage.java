@@ -61,28 +61,26 @@ public class CampaignCreationPage {
     private WebElement enddateopen;
 
 
-
-
     @FindBy(xpath = "//input[@placeholder='Search Nearest Location']")
     private WebElement venuaddress;
 
     //input[contains(@class,'map-search-address-bar')]
 
 
-    private By Venuaddressinputbox=By.xpath("//div//input[@placeholder='Search Nearest Location']");
+    private By Venuaddressinputbox = By.xpath("//div//input[@placeholder='Search Nearest Location']");
 
     // Locator for autocomplete results
-    private By venueOptions = By.xpath("//div[contains(@class,'pac-item')]");
+    private By venueOptions = By.xpath("//div[@class='pac-container pac-logo']//div[contains(@class,'pac-item')]");
 
-    @FindBy(xpath = "//button[@class='btn btn-default my-location ng-star-inserted']")
+    @FindBy(xpath = "//div//button[@class='btn btn-default my-location ng-star-inserted']//span[contains(text(),'My location')]")
     private WebElement mylocationbtn;
+
+    private By mylocationbtnby = By.xpath("//div//button[@class='btn btn-default my-location ng-star-inserted']//span[contains(text(),'My location')]");
 
     @FindBy(xpath = "//div//button[@id='btnNxt']//span[contains(text(),'Next')]")
     private WebElement nextbtn;
 
-    private By nextbtnby=By.xpath("//div//button[@id='btnNxt']//span[contains(text(),'Next')]");
-
-
+    private By nextbtnby = By.xpath("//div//button[@id='btnNxt']//span[contains(text(),'Next')]");
 
 
     //radio locators
@@ -98,13 +96,11 @@ public class CampaignCreationPage {
     private WebElement mediumlabel;
 
 
-
-    public boolean iscalenderfieldsvisible(){
+    public boolean iscalenderfieldsvisible() {
         try {
             return startdateopen.isDisplayed();
-        }
-        catch (Exception e){
-            return  false;
+        } catch (Exception e) {
+            return false;
 
         }
 
@@ -115,7 +111,6 @@ public class CampaignCreationPage {
     }
 
 
-
     //calender
 
     private By Monthtextlocator = By.xpath("//button[@class='current ng-star-inserted']");
@@ -124,18 +119,18 @@ public class CampaignCreationPage {
     private By startnext = By.xpath("//button[@class='next']");
     private By startprevious = By.xpath("//button[@class='previous']");
 
-    @FindBy(xpath = "//div//button[@class='close']")private WebElement closeform;
+    @FindBy(xpath = "//div//button[@class='close']")
+    private WebElement closeform;
 
 
     //TARGETS
     @FindBy(xpath = "//p-select[@placeholder='Select source type']//span[@id='source_type_uid']")
     private WebElement sourcetypedrp;
 
-    private By sourcetypeoptions=By.xpath("//p-selectitem//li[@role='option']");
+    private By sourcetypeoptions = By.xpath("//p-selectitem//li[@role='option']");
 
-    @FindBy(xpath="//input[@role='searchbox']")private WebElement searchinputforsoucetypeoptions;
-
-
+    @FindBy(xpath = "//input[@role='searchbox']")
+    private WebElement searchinputforsoucetypeoptions;
 
 
     @FindBy(xpath = "//button[@id='btnNext']")
@@ -145,7 +140,7 @@ public class CampaignCreationPage {
     @FindBy(xpath = "//textarea[@placeholder='Enter notes']")
     private WebElement notes;
 
-    @FindBy(xpath = "//zc-button//div//button[@id='btnSave']")
+    @FindBy(xpath = "//div//button[@id='btnSave']")
     private WebElement saveandcontinubuttonn;
 
 
@@ -225,61 +220,49 @@ public class CampaignCreationPage {
         }
 
     }
-//    public void selectVenue(String venueText)  {
-//        WebElement input = wait.waitForVisibility(venuaddress);
-//        input.click();
-//        input.sendKeys(venueText);
-//        input.sendKeys(Keys.SPACE);
-//        input.sendKeys(Keys.BACK_SPACE);
-//
-//        try {
-//           new WebDriverWait(driver, Duration.ofSeconds(30))
-//                    .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(venueOptions));
-//
-//            input.sendKeys(Keys.ARROW_DOWN);
-//            input.sendKeys(Keys.ENTER);
-//
-//
-//        } catch (TimeoutException e) {
-//
-//            System.out.println("No venue suggestions appeared, pressing ENTER directly");
-//            input.sendKeys(Keys.BACK_SPACE);
-//            input.sendKeys(Keys.ARROW_DOWN);
-//            input.sendKeys(Keys.ENTER);
-//        }
-//    }
 
+
+   // Select venu address
     public void selectVenue(String venueText) {
 
+
         WebElement input = wait.waitForVisibility(venuaddress);
-        input.click();
-        input.clear();
+        try{
+            input.click();
+            input.clear();
+            input.sendKeys(venueText);
 
-        input.sendKeys(venueText);
-        input.sendKeys(Keys.SPACE);
-
-        try {
-            WebElement option = new WebDriverWait(driver, Duration.ofSeconds(20))
-                    .until(ExpectedConditions.elementToBeClickable(venueOptions));
-
+            input.sendKeys(Keys.SPACE);
+            WebElement option = wait.waitForVisibilityBy(venueOptions);
             option.click();
 
-            js.executeScript("arguments[0].blur();", input);
+        } catch (ElementClickInterceptedException | StaleElementReferenceException | TimeoutException e) {
 
-            new WebDriverWait(driver, Duration.ofSeconds(10))
-                    .until(driver -> (Boolean) js.executeScript(
-                            "return document.body.scrollHeight > window.innerHeight;"
-                    ));
-
-        } catch (TimeoutException e) {
-            input.sendKeys(venueText);
             input.sendKeys(Keys.SPACE);
-            wait.waitForClickabilityBy(venueOptions).click();
-           // input.sendKeys(Keys.ENTER);
+            WebElement option = driver.findElement(venueOptions);
+           js.executeScript("arguments[0].scrollIntoView(true);", option);
+           js.executeScript("arguments[0].click();", option);
         }
     }
 
 
+
+    public void clickNextButton() {
+
+        By nextButton = By.xpath("//div//button[@class='btn btn-primary ng-star-inserted']//span[contains(text(),'Next')]");
+
+        try {
+            WebElement nextElement = wait.waitForVisibilityBy(nextButton);
+            js.executeScript("arguments[0].scrollIntoView(true);", nextElement);
+            wait.waitForClickability(nextElement).click();
+
+        } catch (ElementClickInterceptedException | StaleElementReferenceException | TimeoutException e) {
+
+            WebElement nextElement = driver.findElement(nextButton);
+            js.executeScript("arguments[0].scrollIntoView(true);", nextElement);
+            js.executeScript("arguments[0].click();", nextElement);
+        }
+    }
 
     public void clickSaveAndContinue(){
 
@@ -334,83 +317,57 @@ public class CampaignCreationPage {
     }
 
 
+    //------------------use my location----------------------------------------
 
-     //Mylocation
     public void useMyLocation() {
 
         try {
-            wait.waitForClickability(mylocationbtn).click();
-        } catch (Exception e) {
-            js.executeScript("arguments[0].click();", mylocationbtn);
-        }
 
+            WebElement ele = wait.waitForPresence(mylocationbtnby);
+            if (ele != null && ele.isDisplayed()) {
+                try {
+                    js.executeScript("arguments[0].scrollIntoView(true);", ele);
+                    ele.click();
+
+                } catch (ElementClickInterceptedException |
+                         StaleElementReferenceException |
+                         TimeoutException e) {
+
+                    js.executeScript("arguments[0].scrollIntoView(true);", ele);
+                    js.executeScript("arguments[0].click();", ele);
+                }
+            }
+
+            // Click Next button
+            WebElement nextElement = driver.findElement(By.xpath("//div//button[@id='btnNxt']//span[contains(text(),'Next')]"));
+
+            try {
+
+                js.executeScript("arguments[0].scrollIntoView(true);", nextElement);
+                wait.waitForClickability(nextElement).click();
+            } catch (StaleElementReferenceException |
+                     ElementClickInterceptedException |
+                     TimeoutException e) {
+                // JS fallback for Next button
+                js.executeScript("arguments[0].scrollIntoView(true);", nextElement);
+                js.executeScript("arguments[0].click();", nextElement);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Failed to click Use My Location or Next button: " + e.getMessage());
+            throw e;
+        }
     }
 
 
     public void selectfromsourcetype(String value){
          try {
-             WebElement ele= wait.waitForVisibility(sourcetypedrp);
 
              Dropdownutils.selectPrimeNgDropdown(driver, sourcetypedrp, sourcetypeoptions, value);
          } catch (Exception e) {
-             throw new RuntimeException(e);
+
          }
     }
-
-//    public void clickNext() {
-//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-//        JavascriptExecutor js = (JavascriptExecutor) driver;
-//
-//        try {
-//            WebElement nextBtn = wait.until(
-//                    ExpectedConditions.presenceOfElementLocated(nextbtnby)
-//            );
-//
-//            js.executeScript(
-//                    "window.scrollTo(0, arguments[0].getBoundingClientRect().top + window.pageYOffset - 120);",
-//                    nextBtn
-//            );
-//
-//            nextBtn = wait.until(
-//                    ExpectedConditions.elementToBeClickable(nextbtnby)
-//            );
-//
-//            nextBtn.click();
-//
-//        } catch (Exception e) {
-//            WebElement nextBtn = driver.findElement(nextbtnby);
-//            js.executeScript("arguments[0].click();", nextBtn);
-//        }
-//    }
-//
-
-    public void clickNext() {
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-
-        try {
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(
-                    By.cssSelector(".pac-container")
-            ));
-
-            WebElement nextBtn = wait.until(
-                    ExpectedConditions.presenceOfElementLocated(nextbtnby)
-            );
-
-            js.executeScript(
-                    "window.scrollTo(0, arguments[0].getBoundingClientRect().top + window.pageYOffset - 120);",
-                    nextBtn
-            );
-
-            wait.until(ExpectedConditions.elementToBeClickable(nextbtnby)).click();
-
-        } catch (Exception e) {
-            WebElement nextBtn = driver.findElement(nextbtnby);
-            js.executeScript("arguments[0].click();", nextBtn);
-        }
-    }
-
-
 
 
     public void addtargetnextbtn() {

@@ -8,10 +8,11 @@ public class Totalcounts {
 	
 	WebDriver driver;
 	Webdriverwaitutils wait;
+
+
 	
 	public Totalcounts(WebDriver driver) {
 		this.wait= new Webdriverwaitutils(driver);
-		
         this.driver = driver;
 	}
 

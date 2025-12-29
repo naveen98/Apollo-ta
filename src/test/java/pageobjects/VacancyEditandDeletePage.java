@@ -284,8 +284,18 @@ public class VacancyEditandDeletePage {
 
                   switch (message) {
 
-                      case "Deleted successfully":
-                          return message;
+                      case "Vacancy Deleted Successfully":
+                          return  message;
+
+                      case "Do you want to delete apollo ?":
+
+                          //scroll up and handle
+                          ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, 0);");
+
+                          handlePopupdelete();
+
+                          return "Do you want delete vacancy?";
+
 
                       case "Do you want to delete vacancy?":
                           //scroll up and handle

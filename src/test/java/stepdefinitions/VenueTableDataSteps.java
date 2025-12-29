@@ -41,8 +41,6 @@ public class VenueTableDataSteps {
         String path = "D:\\selenium-intellij\\src\\test\\resources\\configurevenu.xlsx";
         String shname = "table";
         Excelutils.writeTable(path, shname, headers, venudata);
-        driver.close();
-
 
     }
 

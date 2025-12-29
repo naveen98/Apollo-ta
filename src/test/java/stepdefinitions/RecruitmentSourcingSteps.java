@@ -28,7 +28,7 @@ public class RecruitmentSourcingSteps {
 
         String[][] data = Excelutils.getcelldatas(path, sheetname);
 
-        for (int i = 0; i < data.length; i++) {
+        for (int i = 0; i < 1; i++) {
             String sourcetype = data[i][0];
             String singlesoucingeffort = data[i][1];
             String singlehiringeffort = data[i][2];

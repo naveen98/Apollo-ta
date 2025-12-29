@@ -19,8 +19,8 @@ public class AppSelectionSteps {
        ap=new Appselectionpage(driver);
 
     }
-    @When("user clicks on the appselection")
-    public void user_clicks_on_the_appselection() {
+    @When("user clicks on the AppSelection")
+    public void user_clicks_on_the_AppsSelection() {
 
              ap.clickOnAppSelection("talentacq");
     }

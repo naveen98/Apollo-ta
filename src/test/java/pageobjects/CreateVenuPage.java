@@ -27,7 +27,7 @@ public class CreateVenuPage {
 
 
     //------------Navigations---------------------
-    @FindBy(xpath = "//a[@class='icon-bars sidebar-toggle']")
+    @FindBy(xpath = "//a[@mattooltip='Click to toggle Menu']")
     private WebElement Menubar;
 
     @FindBy(xpath = "//li[@id='menu-li-venue-venue']//span[contains(text(),'Venues')]")

@@ -3,29 +3,25 @@ package cucumberoptions;
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
-
 @CucumberOptions(
-        features = "src/test/java/features/CamapignCreation.feature",
+        features = "@target/failed_scenarios.txt",
         glue = {"stepdefinitions", "hooks"},
         plugin = {
                 "pretty",
-                "html:target/cucumber-report.html",
-                "json:target/cucumber.json",
-                "junit:target/cucumber-reports/Cucumber.xml",
+                "html:target/cucumber-report-failed.html",
+                "json:target/cucumber-failed.json",
+                "junit:target/cucumber-reports/Cucumber-failed.xml",
                 "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"
         },
         monochrome = true,
-        dryRun =false,
-        tags="@smoke"
+        dryRun = false
 
 )
+     public class FailedScenarios extends AbstractTestNGCucumberTests {
 
-public class TestNGRunner extends AbstractTestNGCucumberTests {
     @Override
     @DataProvider(parallel = false)
     public Object[][] scenarios() {
-        return super.scenarios(); 
-
-
+        return super.scenarios();
     }
 }

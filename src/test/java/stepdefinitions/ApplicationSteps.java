@@ -41,7 +41,6 @@ public class ApplicationSteps {
         String path = "D:\\selenium-intellij\\src\\test\\resources\\ApplicationTableData.xlsx";
         String shname = "applications";
         Excelutils.writeTable(path, shname, headers, applicantsdata);
-        driver.close();
 
 
     }

@@ -26,8 +26,10 @@ public class VenuTableDataFetchPage {
 
 
     //------------Navigations---------------------
-    @FindBy(xpath = "//a[@class='icon-bars sidebar-toggle']")
+    @FindBy(xpath = "//a[@mattooltip='Click to toggle Menu']")
     private WebElement Menubar;
+
+
     @FindBy(xpath = "//li[@id='menu-li-venue-venue']//span[contains(text(),'Venues')]")
     private WebElement venumodule;
 
@@ -36,8 +38,8 @@ public class VenuTableDataFetchPage {
 
 
     @FindBy(xpath="//div//input[@placeholder='Search Name /  Contact Person / Contact Mobile No / Venue / Availability In']")private WebElement searchinputbox;
-   private By searchinputboxBy=By.xpath("//div//input[@placeholder='Search Name /  Contact Person / Contact Mobile No / Venue / Availability In']");
-    @FindBy(xpath="//button[@class='btn btn-primary filter-clear-btn zc-global-search-btn ng-star-inserted']")private WebElement searchbutton;
+   private By searchinputboxBy=By.xpath("//div//input[@type='text' and contains(@placeholder,'Contact Person')]");
+    @FindBy(xpath="//div//button[@class='btn btn-primary filter-clear-btn zc-global-search-btn ng-star-inserted']")private WebElement searchbutton;
 
 
     //---------Action Methods---------------------
@@ -85,41 +87,41 @@ public class VenuTableDataFetchPage {
 
 
 
-    private final By Venuetabledatarows = By.xpath("//p-table//table//tbody//tr");
+    private final By Venuetabledatarows = By.xpath("//div//p-table//table//tbody//tr");
 
     public List<String[]> getVenueTableData() {
 
         List<String[]> tableData = new ArrayList<>();
 
-
+        // Wait until table rows are present
         wait.waitForPresence(Venuetabledatarows);
 
+        List<WebElement> rows = driver.findElements(
+                By.xpath("//div//p-table//table//tbody//tr"));
 
-        List<WebElement> rows = driver.findElements(By.xpath("//p-table//table//tbody//tr"));
+        for (WebElement row : rows) {
 
-        for (int i = 1; i <= rows.size(); i++) {
+            List<WebElement> cols = row.findElements(By.tagName("td"));
 
-            // Fetch columns freshly for each row
-            List<WebElement> cols = driver.findElements(By.xpath("//p-table//table//tbody//tr[" + i + "]/td"));
+            String Name          = cols.get(0).getText().trim();
+            String contactPerson = cols.get(1).getText().trim();
+            String contactMobileNumber = cols.get(2).getText().trim();
+            String venue = cols.get(3).getText().trim();
+            String availabilityIn = cols.get(4).getText().trim();
 
-
-            String name      = cols.get(0).getText().trim();
-            String ContactPerson    = cols.get(1).getText().trim();
-            String ContactMobileNumber   = cols.get(2).getText().trim();
-            String Venue = cols.get(3).getText().trim();
-            String AvailabilityIn  = cols.get(4).getText().trim();
-
-            // Store in array
-            String[] rowData = {name, ContactPerson, ContactMobileNumber, Venue, AvailabilityIn};
-
+            String[] rowData = {
+                    Name,
+                    contactPerson,
+                    contactMobileNumber,
+                    venue,
+                    availabilityIn
+            };
 
             tableData.add(rowData);
         }
 
         return tableData;
     }
-
-
 
     // ================= Safe click =================
 

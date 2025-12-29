@@ -45,11 +45,11 @@ public class TeamMappingPage {
 
     // user autosuggest input
 
-    @FindBy(xpath = "//p-autocomplete//input[contains(@placeholder,'Search user')]")
+    @FindBy(xpath = "//div//p-autocomplete//input[contains(@placeholder,'Search user')]")
     private WebElement searchUserInput;
 
     private final By userSearchOptions =
-            By.xpath("//ul[@role='listbox']//li[@role='option']");
+            By.xpath("//p-overlay//ul[@role='listbox']//li[@role='option']");
 
 
     //  radio allocations
@@ -67,7 +67,7 @@ public class TeamMappingPage {
     @FindBy(xpath = "//p-iconfield//input[@role='searchbox']")
     private WebElement commonSearchInput;
 
-    @FindBy(xpath = "//button[@id='btnSave']")
+    @FindBy(xpath = "//div//button[@id='btnSave']")
     private WebElement RecruitersaveButton;
 
     @FindBy(xpath = "//p-select[@placeholder='Select state']")
@@ -94,23 +94,23 @@ public class TeamMappingPage {
 
     //  aite add form
 
-    @FindBy(xpath = "//div//button[@id='btnAdd']//span[contains(text(),'Add')]")
+    @FindBy(xpath = "//div//button[@title='Add']//span[contains(text(),'Add')]")
     private WebElement addsitesbutton;
 
-    @FindBy(xpath = "//p-autocomplete//input[@placeholder='Search site']")
+    @FindBy(xpath = "//div//p-autocomplete//input[@placeholder='Search site']")
     private WebElement siteSearchInput;
 
     private final By siteInputOptions =
             By.xpath("//ul[@role='listbox']//li[contains(@class,'p-autocomplete-option')]");
 
-    @FindBy(xpath = "//button[@id='btnAdd']")
-    private WebElement addSiteSaveButton;
+       @FindBy(xpath = "//div//button[@id='btnAdd']")
+       private WebElement addSiteSaveButton;
 
 
 
     // settings icon
 
-    @FindBy(xpath = "//i[@class='icon-settings ui-clickable ng-star-inserted']")
+    @FindBy(xpath = "//p-table//table//tbody//tr//td//div//i[@class='icon-settings ui-clickable ng-star-inserted']")
     private WebElement settingsicons;
 
     @FindBy(xpath = "//button[@class='close']")
@@ -125,7 +125,7 @@ public class TeamMappingPage {
 
 
 
-  /*  public void clickRecruitertab(){
+     /*  public void clickRecruitertab(){
        try {
            WebElement ele = wait.waitForPresence(recruitertab);
 
@@ -159,10 +159,10 @@ public class TeamMappingPage {
 
     //   team mapping search
 
-    @FindBy(xpath = "//div//input[@type='text' and @placeholder='Search user ']")
+    @FindBy(xpath = "//div[@class='ui-inputgroup ng-star-inserted']//input[@placeholder='Search user ']")
     private WebElement searchBox;
 
-    @FindBy(xpath = "//div//button[@type='button']//span[contains(text(),'Search')]")
+    @FindBy(xpath = "//div//button[@class='btn btn-primary filter-clear-btn zc-global-search-btn ng-star-inserted']//span[contains(text(),' Search')]")
     private WebElement searchbutton;
 
 
@@ -181,68 +181,21 @@ public class TeamMappingPage {
         ));
     }
 
- /* public void clickAddRecruiterTeamMappingButton() {
-        Wait<WebDriver> wait = new FluentWait<>(driver)
-                .withTimeout(Duration.ofSeconds(30))
-                .pollingEvery(Duration.ofMillis(500))
-                .ignoring(NoSuchElementException.class);
-        WebElement addRecruiterBtn = wait.until(driver -> {
-            WebElement button = driver.findElement(By.xpath("//div[contains(@class,'group-actions')]//button[.//i[contains(@class,'add')]]"));
-            if (button.isDisplayed() && button.isEnabled()) {
-                return button;
-            } else {
-                return null;
-            }
-        });
-
-
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", addRecruiterBtn);
-
-        // Click the button
-        addRecruiterBtn.click();
-    }
-*/
-
     public void clickAddRecruiterTeamMappingButton() {
-        int maxRetries = 3;
-        int attempt = 0;
-        boolean clicked = false;
 
-        while (attempt < maxRetries && !clicked) {
+        By locator = By.xpath("//div//button[@title='Add Recruiter']");
+
+        for (int i = 1; i <= 3; i++) {
             try {
-                attempt++;
-
-                // Fluent wait for the button
-                Wait<WebDriver> wait = new FluentWait<>(driver)
-                        .withTimeout(Duration.ofSeconds(30))
-                        .pollingEvery(Duration.ofMillis(500))
-                        .ignoring(NoSuchElementException.class);
-
-                WebElement addRecruiterBtn = wait.until(d -> {
-                    WebElement button = d.findElement(By.xpath("//div[contains(@class,'group-actions')]//button[.//i[contains(@class,'add')]]"));
-                    return (button.isDisplayed() && button.isEnabled()) ? button : null;
-                });
-
-                // Scroll into view
-                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", addRecruiterBtn);
-
-                // Click the button
-                addRecruiterBtn.click();
-                clicked = true;
-                System.out.println("Clicked Add Recruiter button on attempt: " + attempt);
-
-            } catch (Exception e) {
-                System.out.println("Attempt " + attempt + " failed: " + e.getMessage());
-                if (attempt == maxRetries) {
-                    throw new RuntimeException("Failed to click Add Recruiter button after " + maxRetries + " attempts", e);
-                }
-                // small pause before retrying
-                try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
+                WebElement btn = driver.findElement(locator);
+                btn.click();
+                System.out.println("Clicked on attempt: " + i);
+                break;
+            } catch (StaleElementReferenceException e) {
+                System.out.println("Retry due to stale element: " + i);
             }
         }
     }
-
-
 
 
 
@@ -317,6 +270,7 @@ public class TeamMappingPage {
     }
 
     public void clickAddSiteSave() {
+
         clickElement(addSiteSaveButton);
     }
 
@@ -335,7 +289,7 @@ public class TeamMappingPage {
             js.executeScript("arguments[0].click();",addSiteSaveButton);
 
         }
-                             //   wait.waitForVisibility(addsitesbutton);
+
     }
 
 
@@ -350,11 +304,28 @@ public class TeamMappingPage {
 
     // teammapping search
     public void searchTeamMappingUser(String username) {
-        WebElement box = wait.waitForVisibility(searchBox);
-        box.clear();
-        box.sendKeys(username);
-        clickElement(searchbutton);
+
+        int attempt = 1;
+        int maxAttempts = 3;
+
+        while (attempt <= maxAttempts) {
+            try {
+                WebElement box = wait.waitForVisibility(searchBox);
+                box.clear();
+                box.sendKeys(username);
+                clickElement(searchbutton);
+                System.out.println("Search successful on attempt: " + attempt);
+                break;
+            } catch (Exception e) {
+                System.out.println("Retry search attempt: " + attempt);
+                if (attempt == maxAttempts) {
+                    throw e;
+                }
+                attempt++;
+            }
+        }
     }
+
 
 
 
@@ -408,10 +379,10 @@ public class TeamMappingPage {
     @FindBy(xpath = "(//div[@role='tab'])[2]")
     private WebElement regionHRmappingtab;
 
-    @FindBy(xpath = "//button[@title='Add Region HR']//span[contains(text(),'Add Region HR')]")
+    @FindBy(xpath = "//div//button[@class='btn btn-primary ng-star-inserted']//span[contains(text(),'Add Region HR')]")
     private WebElement addregionhrbutton;
 
-    @FindBy(xpath="//button[@title='Add']")private WebElement Addregionhrformbutton;
+    @FindBy(xpath="//div//button[@title='Add']")private WebElement Addregionhrformbutton;
 
 
     @FindBy(xpath = "//div[contains(@class,'modal')]//p-autocomplete//input[@placeholder='Search user']")
@@ -420,7 +391,7 @@ public class TeamMappingPage {
     private final By regionhrsearchoptions =
             By.xpath("//ul[@role='listbox']//li[@role='option']");
 
-    @FindBy(xpath = "//button[@id='btnSave']")
+    @FindBy(xpath = "//div//button[@id='btnSave']")
     private WebElement regionhrsavebutton;
 
 
@@ -435,7 +406,7 @@ public class TeamMappingPage {
     private WebElement hraddregionsavebutton;
 
     private final By hrstateoption =
-            By.xpath("//ul[@role='listbox']//li[@role='option']");
+            By.xpath("//p-selectitem//li[@role='option']");
 
     private final By hrregionoption =
             By.xpath("//p-multiselect-item//li[@role='option']");

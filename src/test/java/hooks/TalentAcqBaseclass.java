@@ -47,7 +47,7 @@ public class TalentAcqBaseclass {
                 return new FirefoxDriver(ffOptions);
 
             case "edge":
-                EdgeOptions edOptions = new EdgeOptions();
+                EdgeOptions  edOptions = new EdgeOptions();
 
                 // Set geolocation preference: 1 = allow, 2 = block
                 Map<String, Object> edgeContentSettings = new HashMap<>();

@@ -13,10 +13,11 @@ Feature: Talent Acquisition
     Then Apollo TalentAcq app should be displayed
 
    @smoke
-  Scenario: Navigate to campaign module
-    Given i am on the campaign module page
-    When i navigate to campaign module
-    Then i create new campaign from excel sheet
+   Scenario: Create campaigns from excel and verify campaign count
+     Given I am on the campaign module page
+     When I navigate to campaign module for count verification
+     And I capture campaign count before creation
+     Then I create campaigns from excel and verify campaign count
 
   @smokes
   Scenario: Navigate to job module
@@ -52,7 +53,7 @@ Feature: Talent Acquisition
     Given i navigate to sourcing module under recruitment scoring
     Then i add scoring from excel sheet
 
-  @smoke
+  @smokes
   Scenario: Verify recruitment souring edit and delete actions
     Given i navigate to recruitment sourcing
     When i click on edit action
@@ -81,7 +82,7 @@ Feature: Talent Acquisition
     Then i capture the applicants data into excel
 
 
-  @smoke
+  @smokes
   Scenario: User navigate to Venu Module
     Given I navigate to Venu module from Menubar
     When I create new Venu configuration from Excel test data
@@ -90,7 +91,7 @@ Feature: Talent Acquisition
     Scenario: User navigate Venue Module And Capture the data into excel
       Given Iam navigate to Venu module from Menubar
       When I verify the created Venu details
-        Then I capture the Venu data into excel file
+      Then I capture the Venu data into excel file
 
 
 

@@ -27,22 +27,23 @@ public class RecruittmentsourcingEditAndDeletePage {
     @FindBy(xpath = "//a[@mattooltip='Click to toggle Menu']")
     private WebElement menubar;
 
-    @FindBy(xpath = "//span[text()='Sourcing']")
+    @FindBy(xpath = "//li[@id='menu-li-sourcing-recrtmnt-score-config']//span[text()='Sourcing']")
     private WebElement sourcingmodule;
 
-    @FindBy(xpath = "(//li[@id='menu-li-sourcing-recrtmnt-score-config'])[2]")
+    @FindBy(xpath = "//span[text()='Recruitment Scoring Configuration']/parent::a")
     private WebElement recruitmentscoring;
 
-    @FindBy(xpath = "//input[@placeholder='Search  Source Type / Sourcing effort / Hiring effort']")
+    @FindBy(xpath = "//div//input[@placeholder='Search  Source Type / Sourcing effort / Hiring effort']")
     private WebElement searchbar;
 
-    @FindBy(xpath = "//button[@class='btn btn-primary filter-clear-btn zc-global-search-btn']")
+    @FindBy(xpath = "//button[@class='btn btn-primary filter-clear-btn zc-global-search-btn ng-star-inserted']")
     private WebElement searchbutton;
 
 
-    @FindBy(xpath = "//i[@id='dropdownBasic1']")
+    @FindBy(xpath = "//div//i[@id='dropdownBasic1']")
     private WebElement actionbutton;
-    @FindBy(xpath = "//i[@class='icon-edit']")
+
+    @FindBy(xpath = "(//button//span[contains(text(),'Edit')])[10]")
     private WebElement editbutton;
 
 
@@ -67,7 +68,7 @@ public class RecruittmentsourcingEditAndDeletePage {
     @FindBy(xpath = "(//input[@placeholder='Enter hiring effort'])[3]")
     private WebElement partreqhiringeffort;
 
-    @FindBy(xpath = "//button[@id='btnSave']")
+    @FindBy(xpath = "//div//button[@id='btnSave']")
     private WebElement updatebutton;
 
     @FindBy(xpath = "//button[@class='btn btn-sm btn-primary ng-star-inserted']")
@@ -88,7 +89,7 @@ public class RecruittmentsourcingEditAndDeletePage {
 
     //---------------------  locators for Delete --------------------------------
 
-    @FindBy(xpath = "//i[@class='icon-delete']")
+    @FindBy(xpath = "//button[@class='dropdown-item ng-star-inserted']//i[@class='icon-delete']")
     private WebElement deleteicon;
 
     private final By ToastOrPopupMsg = By.xpath("//div[(@role='alert' and contains(@class, 'toast-message')) or (contains(@class,'modal-body') and contains(text(),'Do you want to delete this scoring configuration?'))]");
@@ -105,12 +106,18 @@ public class RecruittmentsourcingEditAndDeletePage {
 
     //-------------Action Methods for Edit -------------------------
     public void navigatetorecruitmentsourcing() {
-        clickElement(menubar);
-        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", sourcingmodule);
-        clickElement(sourcingmodule);
-        clickElement(recruitmentscoring);
+     try {
+         clickElement(menubar);
+         js.executeScript("arguments[0].scrollIntoView({block: 'center'});", sourcingmodule);
+         clickElement(sourcingmodule);
+         clickElement(recruitmentscoring);
+     } catch (Exception e) {
+         clickElement(menubar);
+         js.executeScript("arguments[0].scrollIntoView({block: 'center'});", sourcingmodule);
+         clickElement(sourcingmodule);
+         clickElement(recruitmentscoring);
+     }
     }
-
 
     public void searchitem(String name) {
         try {
@@ -173,6 +180,9 @@ public class RecruittmentsourcingEditAndDeletePage {
 
 
     public void clickupdate() {
+
+        js.executeScript("window.scrollTo(0, document.body.scrollHeight);");
+
         clickElement(updatebutton);
     }
 

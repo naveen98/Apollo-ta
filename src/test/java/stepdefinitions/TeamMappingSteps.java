@@ -28,13 +28,11 @@ public class TeamMappingSteps {
     public void i_add_user_team_mapping_and_sites_to_recruiters() throws Exception {
 
         String path = "D:\\selenium-intellij\\src\\test\\resources\\teammapping.xlsx";
-
         // ----------------- USER TEAM MAPPING -----------------
         String sheetname = "searchrecruiter";
         String[][] userData = Excelutils.getcelldatas(path, sheetname);
         tm.navigateToTeamMapping();
      //   tm.clickRecruitertab();
-        tm.clickAddRecruiterTeamMappingButton();
 
         for (String[] row : userData) {
 
@@ -43,60 +41,55 @@ public class TeamMappingSteps {
             String candidateAllocation = row[2];
             String candidateAutoAllocation = row[3];
 
+
+            tm.clickAddRecruiterTeamMappingButton();
             tm.userAdd(userInput, userExpected);
+
             tm.selectRadioButtonOption("Candidate Allocation", candidateAllocation);
 
             if (candidateAllocation.equalsIgnoreCase("Yes")
-                    && tm.isCandidateAutoAllocationVisible()) {
+                    && tm.isCandidateAutoAllocationVisible())
 
                 tm.selectRadioButtonOption("Candidate Auto Allocation", candidateAutoAllocation);
-            }
+
 
             tm.clickRecruiterSaveButton();
 
             if (tm.isCloseDisplayed()) {
                 tm.closeSettingsForm();
             }
-        }
 
-        // ----------------- SITE MAPPING TO RECRUITER -----------------
-        String sh = "sites";
-        String[][] siteData = Excelutils.getcelldatas(path, sh);
 
-        for (String[] row : siteData) {
+            // ----------------- SITE MAPPING TO RECRUITER -----------------
+            String sh = "sites";
+            String[][] siteData = Excelutils.getcelldatas(path, sh);
 
-            String siteInput = row[0];
-            String siteExpected = row[1];
-            String username = row[2];
+            for (String[] rows : siteData) {
 
-            tm.searchTeamMappingUser(username);
+                String siteInput = rows[0];
+                String siteExpected = rows[1];
+                String username = rows[2];
 
-            if (tm.isNoRecordFoundDisplayedFast()) {
-                System.out.println("User not found for site mapping: " + username);
-                continue;
+                tm.searchTeamMappingUser(username);
+
+//                if (tm.isNoRecordFoundDisplayedFast()) {
+//                    System.out.println("User not found for site mapping: " + username);
+//                    continue;
+//                }
+
+                tm.clickSettingIcon();
+               // tm.waitForSettingsForm();
+                tm.clickAddSiteButton();
+                tm.addSites(siteInput, siteExpected);
+
+                //sites save button
+                tm.waitforaddsitesbutton();
+                tm.closeSettingsForm();
+
+
             }
-
-            tm.clickSettingIcon();
-            tm.waitForSettingsForm();
-
-            tm.clickAddSiteButton();
-            tm.waitForSettingsForm();
-
-            tm.addSites(siteInput, siteExpected);
-
-            //sitesave buttons
-
-            tm.waitforaddsitesbutton();
-
-
-            tm.clickAddSiteSave();
-            tm.closeSettingsForm();
-
-
-//            if (tm.isCloseDisplayed()) {
-//                tm.closeSettingsForm();
-//            }
         }
+
     }
 
     // -------------------------------------------------------------------------
@@ -125,37 +118,37 @@ public class TeamMappingSteps {
             if (tm.isCloseDisplayed()) {
                 tm.closeSettingsForm();
             }
-        }
 
-        // ----------------- STATE & REGION MAPPING -----------------
-        String sheetnames = "locations";
-        String[][] locationData = Excelutils.getcelldatas(path, sheetnames);
 
-        for (String[] row : locationData) {
+            // ----------------- STATE & REGION MAPPING -----------------
+            String sheetnames = "locations";
+            String[][] locationData = Excelutils.getcelldatas(path, sheetnames);
 
-            String state = row[0];
-            String region = row[1];
-            String username = row[2];
+            for (String[] rows : locationData) {
 
-            tm.searchTeamMappingUser(username);
+                String state = rows[0];
+                String region = rows[1];
+                String username = rows[2];
 
-            if (tm.isNoRecordFoundDisplayedFast()) {
-                System.out.println("Region HR not found: " + username);
-                continue;
-            }
+                tm.searchTeamMappingUser(username);
 
-            tm.clickHRSettingIcon();
-           // tm.waitForSettingsForm();
+                if (tm.isNoRecordFoundDisplayedFast()) {
+                    System.out.println("Region HR not found: " + username);
+                    continue;
+                }
 
-            tm.clickAddRegionInsideFormButton();
-           // tm.waitForSettingsForm();
+                tm.clickHRSettingIcon();
 
-            tm.selectHRStateRegion(state, region);
+                tm.clickAddRegionInsideFormButton();
+                // tm.waitForSettingsForm();
 
-            tm.clickHRAddRegionSave();
+                tm.selectHRStateRegion(state, region);
 
-            if (tm.isCloseDisplayed()) {
-                tm.closeSettingsForm();
+                tm.clickHRAddRegionSave();
+
+                if (tm.isCloseDisplayed()) {
+                    tm.closeSettingsForm();
+                }
             }
         }
     }

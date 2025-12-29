@@ -8,12 +8,12 @@ import java.time.Duration;
 import java.util.List;
 
 public class Webdriverwaitutils {
-	
+
 	    public WebDriver driver;
 	    public WebDriverWait wait;
 
 	     public Webdriverwaitutils(WebDriver driver) {
-	
+
 	        this.driver = driver;
 	        this.wait = new WebDriverWait(driver, Duration.ofSeconds(60));
 	    }
@@ -30,13 +30,13 @@ public class Webdriverwaitutils {
         return wait.until(ExpectedConditions.elementToBeClickable(element));
     }
 
-	   
+
 	    public WebElement waitForPresence(By locator) {
 	        return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
 	    }
-	    
 
-	    
+
+
 	    public Alert waitForAlert() {
 	        return wait.until(ExpectedConditions.alertIsPresent());
 	    }
@@ -77,6 +77,7 @@ public class Webdriverwaitutils {
 	    }
 
 
+
     public WebElement waitForVisibilityWithRetry(By locator) {
 
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
@@ -97,7 +98,7 @@ public class Webdriverwaitutils {
 
 
         public WebElement clickElement(WebElement locator) {
-	    	  
+
 	          WebElement element= wait.until(ExpectedConditions.elementToBeClickable(locator));
 	          JavascriptExecutor js=(JavascriptExecutor)driver;
 	          js.executeScript("arguments[0].scrollIntoView(true);", element);
@@ -119,8 +120,8 @@ public class Webdriverwaitutils {
 	        return new WebDriverWait(driver, Duration.ofSeconds(60))
 	            .until(ExpectedConditions.presenceOfElementLocated(locator));
 	    }
-	 
-	    
+
+
 	    public WebElement waitForTextToBePresentsendkeys(WebElement element, String text) {
 	        try {
 	            // Wait until element is visible
@@ -148,7 +149,7 @@ public class Webdriverwaitutils {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
         wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
     }
-		
+
 
 
     //------------------Retry logic for search------------------

@@ -27,10 +27,10 @@ public class RecruitmentSourcingPage {
     @FindBy(xpath = "//a[@mattooltip='Click to toggle Menu']")
     private WebElement menubar;
 
-    @FindBy(xpath = "//a[@class='nav-link nav-dropdown-toggle']//span[text()='Sourcing']")
+    @FindBy(xpath = "//li[@id='menu-li-sourcing-recrtmnt-score-config']//span[text()='Sourcing']")
     private WebElement sourcingmodule;
 
-    @FindBy(xpath = "(//li[@id='menu-li-sourcing-recrtmnt-score-config'])[2]")
+    @FindBy(xpath = "//span[text()='Recruitment Scoring Configuration']/parent::a")
     private WebElement recruitmentscoring;
 
     @FindBy(xpath = "//div//button[@class='btn btn-primary ng-star-inserted']//span[contains(text(),'Add Scoring')]")
@@ -66,7 +66,7 @@ public class RecruitmentSourcingPage {
     @FindBy(xpath = "//button[@id='dialog-cancel-btn']")
     private WebElement popupCancelButton;
 
-    @FindBy(xpath = "//button[@title='Close']")
+    @FindBy(xpath = "//div//button[@class='close']")
     private WebElement cancelFormButton;
 
     @FindBy(xpath = "//button[@title='Reset']")

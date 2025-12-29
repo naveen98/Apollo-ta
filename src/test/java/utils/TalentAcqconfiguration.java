@@ -35,6 +35,8 @@ public class TalentAcqconfiguration {
                     url = pro.getProperty("baseurldev");
                     username = pro.getProperty("usernamedev");
                     password = pro.getProperty("passworddev");
+
+
                     break;
                 case "uat":
                     url = pro.getProperty("baseurluat");
@@ -69,4 +71,5 @@ public class TalentAcqconfiguration {
 
         return password;
     }
+
 }

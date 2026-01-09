@@ -1,120 +1,89 @@
 Feature: Campaign creation
 
   @smoke @regression
-  Scenario: Login with valid credentials and see CMS label
-    Given I am on the CMS login page
+  Scenario: Verify Login with valid credentials and see TalentAcquisition
+    Given I am on the TalentAcquisition login page
     When I login using valid credentials
-    Then I should see the CMS home page
+    Then  I should see the TalentAcquisition page
 
   @smoke @regression
-  Scenario: User selects Talent Acquisition
-    Given user is on the App Selection page
-    When user clicks on the AppSelection
-    Then Apollo TalentAcq app should be displayed
+  Scenario: Verify the clicking Talent Acquisition
+    Given I Navigate to App Selection page
+    When I clicks on the AppSelection
+    Then Apollo Acquisition app should be displayed
 
 
   @smoke
-  Scenario: Create campaigns from excel and verify campaign count
+  Scenario: Verify counts for campaign section in campaign module
     Given I am on the campaign module page
     When I navigate to campaign module for count verification
     And I capture campaign count before creation
-    Then I create campaigns from excel and verify campaign count
+    Then I create campaigns and verify campaign count
 
 
-  @smoke
-  Scenario: Verify edit action for campaign
+  @Smoke
+  Scenario: Verify Edit Action for campaign
     Given I navigate to campaign module
     When I verify edit action for campaign
 
 
-  @smoke
-  Scenario: click on campaign and add recruiters
-    Given  navigate to campaign module
-    When I click on campaign and add recruiters
+  @Smoke
+  Scenario: Verify adding recruiters to a specific campaign
+    Given I have navigated to the Campaigns module
+    When I click on a campaign and add recruiters
+    Then I should see the recruiters successfully added to the campaign
 
-
-  @smoke
+  @Smoke
   Scenario: Verify Added recruiter in campaign
     Given I navigate to campaign Recruiter Table
-    When I  capture added recruiter in campaign
+    When I capture added recruiter in campaign
+    Then I should see the added recruiter in campaign recruiter table
 
 
-  @smoke
-    Scenario:Login with Recruiter
-      Given I login with recruiter credentials
-      When I verify recruiter dashboard page
+  @Smoke
+  Scenario: verify Login with Recruiter
+    Given I login with recruiter credentials
+    When I verify recruiter dashboard page
 
+  @Smoke
+  Scenario: Verify the campaign table data from recruiter campaign module
+    Given I Navigate To Campaign Module
+    When I Captures the campaigns Table data
+    Then I should click on logout
 
-    @smoke
-      Scenario:Navigate To Campaign Module
-      Given I Navigate To Campaign Module
-      When I Captures the campaigns Table data
-      Then I should click on logout
-
-
-  @smoke
-  Scenario: Login with valid credentials and see CMS label
-    Given I am on the CMS login page
+  @Smoke
+  Scenario: Login with valid credentials and TalentAcquisition CMS label
+    Given I am on the TalentAcquisition login page
     When I login using valid credentials
-    Then I should see the CMS home page
+    Then I should see the TalentAcquisition page
 
-  @smoke
-  Scenario: User selects Talent Acquisition
-    Given user is on the App Selection page
-    When user clicks on the AppSelection
-    Then Apollo TalentAcq app should be displayed
+  @Smoke
+  Scenario: Verify the clicking Talent Acquisition
+    Given I Navigate to App Selection page
+    When I clicks on the AppSelection
+    Then Apollo Acquisition app should be displayed
 
-    @smoke
-      Scenario:Delete Campaign and check count after delete
-      Given I Navigate to Campaign Module
-      When i click on Delete Campaign
-      Then i Verify the Deleted Campaign
+  @Smoke
+  Scenario: Delete Campaign and check count after delete
+    Given I Navigate to Campaign Module
+    When i click on Delete Campaign
+    Then i Verify the Deleted Campaign
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  @smokess
-  Scenario: Recruiter copies URL and completes application using quick apply
+  @Smoke
+  Scenario:I Verify Campaign Recruiter copies URL and completes application
     Given I am on campaign recruiter page
     When I click recruiter copy url and open in new tab
     And I enter mobile number and otp
-    And I complete application using quick apply
+    Then I click submit application
+
+    @regression
+      Scenario:Verify the Applied candidate details From Application Module
+      Given I Navigate to applications module
+      When I verify the candidate application and capture the status
+
+  @regression
+  Scenario: Verify recruiters Application with invalid Data
+    Given I am on campaign recruiter page for invaid data
+    When I open recruiters application url in new tab
+    Then I should see validation errors after submitting with invalid data
 

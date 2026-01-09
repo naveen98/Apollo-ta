@@ -16,9 +16,7 @@ import org.testng.annotations.DataProvider;
         },
         monochrome = true,
         dryRun =false,
-        tags="@smoke"
-
-)
+        tags="@smoke" )
 
 public class TestNGRunner extends AbstractTestNGCucumberTests {
     @Override

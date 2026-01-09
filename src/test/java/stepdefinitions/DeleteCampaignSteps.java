@@ -19,17 +19,24 @@ public class DeleteCampaignSteps {
     int pageAfterDelete;
 
     final int campaignsDeleted = 1;
+    final String campaignName = "FestiveSale";
+
+    // ================= GIVEN =================
 
     @Given("I Navigate to Campaign Module")
     public void i_navigate_to_campaign_module() {
 
         driver = DriverManager.getDriver();
+        Assert.assertNotNull(driver, "WebDriver is NULL");
+
         deleteCampaignPage = new DeleteCampaignPage(driver);
         campaignCounts = new CamapaignsCountsPage(driver);
         pageCounts = new CampaigntotalPagecounts(driver);
 
         deleteCampaignPage.navigateCampaignsModule();
     }
+
+    // ================= WHEN =================
 
     @When("i click on Delete Campaign")
     public void i_click_on_delete_campaign() {
@@ -38,8 +45,19 @@ public class DeleteCampaignSteps {
         countBeforeDelete = campaignCounts.getTotalCampaignCount();
         pageBeforeDelete = pageCounts.getTotalPagesFromText();
 
+        Assert.assertTrue(
+                countBeforeDelete > 0,
+                "No campaigns available to delete"
+        );
+
         // ===== DELETE FLOW =====
-        deleteCampaignPage.searchcampaigns("FestiveSale");
+        deleteCampaignPage.searchcampaigns(campaignName);
+
+        Assert.assertFalse(
+                deleteCampaignPage.isNoRecordFoundDisplayed(),
+                "Campaign not found for deletion: " + campaignName
+        );
+
         deleteCampaignPage.clickDeleteOption();
 
         Assert.assertTrue(
@@ -48,10 +66,15 @@ public class DeleteCampaignSteps {
         );
 
         String toast = deleteCampaignPage.getvalidationmessage();
-        Assert.assertEquals(
+
+        Assert.assertNotNull(
                 toast,
-                "Campaign Deleted Successfully",
-                "Toast message mismatch"
+                "Toast message is NULL"
+        );
+
+        Assert.assertTrue(
+                toast.toLowerCase().contains("deleted"),
+                "Unexpected toast message: " + toast
         );
 
         // ===== AFTER DELETE =====
@@ -60,27 +83,29 @@ public class DeleteCampaignSteps {
         countAfterDelete = campaignCounts.getTotalCampaignCount();
         pageAfterDelete = pageCounts.getTotalPagesFromText();
 
+        // ----- Count Assertion -----
         Assert.assertEquals(
                 countAfterDelete,
                 countBeforeDelete - campaignsDeleted,
                 "Campaign count mismatch after delete"
         );
 
+        // ----- Pagination Assertion -----
         Assert.assertTrue(
                 pageAfterDelete <= pageBeforeDelete,
-                "Pagination count should not increase after delete"
+                "Pagination count increased after delete"
         );
     }
+
+    // ================= THEN =================
 
     @Then("i Verify the Deleted Campaign")
     public void i_verify_the_deleted_campaign() {
 
-        deleteCampaignPage.searchcampaigns("FestiveSale");
+        deleteCampaignPage.searchcampaigns(campaignName);
 
-        boolean noRecord = deleteCampaignPage.isNoRecordFoundDisplayed();
+        Assert.assertTrue( deleteCampaignPage.isNoRecordFoundDisplayed(),  "Deleted campaign is still visible: " + campaignName  );
 
-        Assert.assertTrue(noRecord, "Deleted campaign is still visible");
-
-        System.out.println(" Deleted campaign verified : No records found is Displayed");
+        System.out.println("Deleted campaign verified successfully – No records found");
     }
 }

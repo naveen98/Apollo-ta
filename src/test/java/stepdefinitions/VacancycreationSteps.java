@@ -46,7 +46,7 @@ public class VacancycreationSteps {
 
                 // Fill form
                 vc.createVacancy(siteInput, siteExpected, jobRole, noVacancy);
-                vc.selectdate(month, year);
+                vc.selectDate(month, year);
 
                 // Click save
                 vc.clicksave();

@@ -100,10 +100,11 @@ public class VacancycreationPage {
         wait.waitForEnterText(Noofvacancies, noOfVacancies);
     }
 
-    public void selectdate(String expmonth, String expyear) {
+    public void selectDate(String expmonth, String expyear) {
         clickElement(dateopen);
-        dt.selectMonthAndYear(yearLocator, prevBtn, nextBtn, expmonth, expyear, allMonthsLocator);
+        dt.selectMonthAndYear(yearLocator, prevBtn, nextBtn, allMonthsLocator, expmonth, expyear);
     }
+
 
     public void clicksave() {
         clickElement(savebutton);

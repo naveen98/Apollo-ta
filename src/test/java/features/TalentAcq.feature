@@ -1,16 +1,17 @@
 Feature: Talent Acquisition
 
   @smoke @regression
-  Scenario: Login with valid credentials and see CMS label
-    Given I am on the CMS login page
+  Scenario: Verify Login with valid credentials and see TalentAcquisition
+    Given I am on the TalentAcquisition login page
     When I login using valid credentials
-    Then I should see the CMS home page
+    Then  I should see the TalentAcquisition page
 
   @smoke @regression
-  Scenario: User selects Talent Acquisition
-    Given user is on the App Selection page
-    When user clicks on the appselection
-    Then Apollo TalentAcq app should be displayed
+  Scenario: Verify the clicking Talent Acquisition
+    Given I Navigate to App Selection page
+    When I clicks on the AppSelection
+    Then Apollo Acquisition app should be displayed
+
 
    @smoke
    Scenario: Create campaigns from excel and verify campaign count

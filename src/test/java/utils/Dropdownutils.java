@@ -382,6 +382,53 @@ public class Dropdownutils {
     }
 
 
+    //===================select multiple options======================
+    public static void selectMultipleByVisibleText(
+            WebDriver driver,
+            WebElement dropdown,
+            By optionsLocator,
+            String values) {
+
+        if (values == null || values.trim().isEmpty()) {
+            return;
+        }
+
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        // Split Excel value
+        String[] items = values.split(",");
+
+        // Open dropdown
+        dropdown.click();
+
+        for (String item : items) {
+            String expected = item.trim();
+
+            boolean found = false;
+
+            List<WebElement> options =
+                    driver.findElements(optionsLocator);
+
+            for (WebElement option : options) {
+                String actual = option.getText().trim();
+
+                if (actual.equalsIgnoreCase(expected)) {
+                    js.executeScript("arguments[0].click();", option);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                System.out.println("Skill not found: " + expected);
+            }
+        }
+
+        // Click outside to close dropdown
+        js.executeScript("document.body.click();");
+    }
+
+
     //=================retry with by==============
     public static void selectbyvisibletextlistretryBy(WebDriver driver, By drplocator, By listlocator, String visibleText) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));

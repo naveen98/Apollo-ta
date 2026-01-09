@@ -148,46 +148,53 @@ public class Datepickutils {
 	  }
 
 
+    public void selectMonthAndYear(
+            By yearText,
+            By prevBtn,
+            By nextBtn,
+            By monthCells,
+            String expMonth,
+            String expYear) {
 
-        public void selectMonthAndYear(By yearLocator, By prevBtn, By nextBtn, String expMonth, String expYear, By allMonthsLocator) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
 
-            JavascriptExecutor js = (JavascriptExecutor) driver;
+        try {
+            // ---------- YEAR ----------
+            while (true) {
+                String currentYear = wait.waitForVisibilityBy(yearText).getText().trim();
 
-            try {
-                while (true) {
-                    String currentYear =wait.waitForVisibilityBy(yearLocator).getText().trim();
-                    int currentYearNum = Integer.parseInt(currentYear);
-                    int expYearNum = Integer.parseInt(expYear);
+                int current = Integer.parseInt(currentYear);
+                int expected = Integer.parseInt(expYear);
 
-                    if (currentYearNum == expYearNum) {
-                        break;
-                    } else if (currentYearNum > expYearNum) {
-                        WebElement prev = wait.waitForClickabilityby(prevBtn);
-                        js.executeScript("arguments[0].click();", prev);
-                    } else {
-                        WebElement next = wait.waitForClickabilityby(nextBtn);
-                        js.executeScript("arguments[0].click();", next);
-                    }
-
-                  //  Thread.sleep(5000);
+                if (current == expected) {
+                    break;
+                } else if (current > expected) {
+                    js.executeScript("arguments[0].click();",
+                            wait.waitForClickabilityby(prevBtn));
+                } else {
+                    js.executeScript("arguments[0].click();",
+                            wait.waitForClickabilityby(nextBtn));
                 }
-
-                List<WebElement> monthCells = wait.waitForAllElementsVisible(allMonthsLocator);
-
-                for (WebElement cell : monthCells) {
-                    String cellText = cell.getText().trim();
-                    if (!cellText.isEmpty() && cellText.equalsIgnoreCase(expMonth)) {
-                        js.executeScript("arguments[0].click();", cell);
-                        break;
-                    }
-                }
-
-            } catch (Exception e) {
-
-                System.out.println("Month/Year selection failed: " + e.getMessage());
             }
+
+            // ---------- MONTH ----------
+            List<WebElement> months =
+                    wait.waitForAllElementsVisible(monthCells);
+
+            for (WebElement month : months) {
+                if (month.getText().trim().equalsIgnoreCase(expMonth)) {
+                    js.executeScript("arguments[0].click();", month);
+                    break;
+                }
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Month/Year selection failed", e);
         }
     }
+
+
+}
 
 
 

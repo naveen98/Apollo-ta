@@ -131,6 +131,69 @@ public class Excelutils {
 
     }
 
+    public static String[][] exceldata(String xlfilepath, String sheetname) throws IOException {
+
+        fis = new FileInputStream(xlfilepath);
+        wb = WorkbookFactory.create(fis);
+        sh = wb.getSheet(sheetname);
+
+        int totalrow = sh.getPhysicalNumberOfRows();
+        if (totalrow <= 1) { // no data rows
+            fis.close();
+            return new String[0][0];
+        }
+
+        int totalcols = sh.getRow(0).getLastCellNum();
+        DataFormatter formatter = new DataFormatter();
+
+        // Count non-empty rows
+        int nonEmptyRows = 0;
+
+        for (int i = 1; i < totalrow; i++) {
+            Row row = sh.getRow(i);
+            if (row == null) continue;
+
+            boolean empty = true;
+
+            for (int j = 0; j < totalcols; j++) {
+                Cell cell = row.getCell(j);
+                if (cell != null && !formatter.formatCellValue(cell).trim().isEmpty()) {
+                    empty = false;
+                    break;
+                }
+            }
+            if (!empty)
+                nonEmptyRows++;
+        }
+
+        String[][] data = new String[nonEmptyRows][totalcols];
+        int dataIndex = 0;
+
+        for (int i = 1; i < totalrow; i++) {
+            Row row = sh.getRow(i);
+            if (row == null) continue;
+
+            boolean empty = true;
+            for (int j = 0; j < totalcols; j++) {
+                Cell cell = row.getCell(j);
+                if (cell != null && !formatter.formatCellValue(cell).trim().isEmpty()) {
+                    empty = false;
+                    break;
+                }
+            }
+            if (empty) continue;
+
+            for (int j = 0; j < totalcols; j++) {
+                Cell col = row.getCell(j);
+                data[dataIndex][j] = (col != null) ? formatter.formatCellValue(col) : "";
+            }
+            dataIndex++;
+        }
+
+        fis.close();
+        return data;
+    }
+
 
     //excel write data
     public static void writecelldatas(String xlfilepath, String sheetname, int rownum, int cellnum, String data)

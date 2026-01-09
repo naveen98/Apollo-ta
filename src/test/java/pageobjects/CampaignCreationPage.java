@@ -16,6 +16,7 @@ import utils.Webdriverwaitutils;
 import java.nio.channels.ScatteringByteChannel;
 import java.security.PrivateKey;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CampaignCreationPage {
@@ -399,20 +400,47 @@ public class CampaignCreationPage {
     }
 
 
+
     public String gettoastmessage() {
+        try {
+            List<WebElement> messageElements = wait.waitForAllElementsVisible(toastMsg);
 
-        String message = "";
-        List<WebElement> msg=wait.waitForAllElementsVisible(toastMsg);
-        for(WebElement msgs:msg)
-        {
-            if (msgs != null && msgs.isDisplayed())
-                message = msgs.getText();
+            if (messageElements != null && !messageElements.isEmpty()) {
+                for (WebElement msgElement : messageElements) {
+                    if (!msgElement.isDisplayed())
+                        continue;
 
-            return message;
+                    String message = msgElement.getText().trim();
+                    System.out.println("Toast message: " + message);
+
+                    switch (message) {
+                        case "Campaign Saved Successfully":
+
+                            return message;
+
+                        case "Code already exists!":
+                            clickcloseform();
+                            return  message;
+
+                        case "Campaign Deleted Successfully":
+
+                            return message;
+
+                        default:
+                            // cancelform();
+                            return message;
+                    }
+                }
+            } else {
+                System.out.println("Toast or popup not visible.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error  validation message: " + e.getMessage());
         }
-        return "no message displayed";
-
+        return "No Message Displayed";
     }
+
+
     public void clickcloseform(){
 
         try{
@@ -424,6 +452,34 @@ public class CampaignCreationPage {
         } catch (Exception e) {
             js.executeScript("arguments[0].click();",closeform);
         }
+    }
+
+
+    //   validation messages
+    @FindBy(xpath = "//div[@class='invalid-feedback ng-star-inserted']")
+    private List<WebElement> validationmessages;
+
+    // Get all validation messages displayed
+
+    public List<String> getValidationMessages() {
+        List<String> messages = new ArrayList<>();
+        try {
+            if (validationmessages != null && !validationmessages.isEmpty()) {
+                wait.waitForAllElementsVisible(validationmessages);
+
+                for (WebElement el : validationmessages) {
+                    if (el != null && el.isDisplayed()) {
+                        String text = el.getText().trim();
+                        if (!text.isEmpty()) {
+                            messages.add(text);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error fetching validation messages: " + e.getMessage());
+        }
+        return messages;
     }
 
 

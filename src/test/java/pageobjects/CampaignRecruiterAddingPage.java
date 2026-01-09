@@ -100,6 +100,24 @@ public class CampaignRecruiterAddingPage {
         );
     }
 
+    private By toastMsg = By.xpath("//div[contains(@class, 'toast-message') and contains(@class, 'ng-star-inserted')]");
+
+
+    public String gettoastmessage() {
+
+        String message = "";
+        List<WebElement> msg=wait.waitForAllElementsVisible(toastMsg);
+        for(WebElement msgs:msg)
+        {
+            if (msgs != null && msgs.isDisplayed())
+                message = msgs.getText();
+
+            return message;
+        }
+        return "no message displayed";
+
+    }
+
 
     private void clickElement(WebElement element) {
         try {
@@ -196,12 +214,6 @@ public class CampaignRecruiterAddingPage {
         clickElement(userprofileicon);
         clickElement(logoutbutton);
     }
-
-
-
-
-
-
 
 
 

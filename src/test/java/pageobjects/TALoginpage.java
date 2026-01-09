@@ -1,10 +1,14 @@
 package pageobjects;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import utils.Webdriverwaitutils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TALoginpage {
     WebDriver driver;
@@ -41,7 +45,12 @@ public class TALoginpage {
 
     }
 
-    public boolean cmsdisplayed() {
+
+    public void geturl(String url){
+        driver.get(url);
+    }
+
+    public boolean TalentAcquisitionIsdisplayed() {
 
         try {
             WebElement Text = wait.waitForVisibility(admdisplays);
@@ -53,6 +62,19 @@ public class TALoginpage {
         }
         return false;
 
+    }
+
+
+
+    public void openUrlInNewTab(String url) {
+
+        // Open new tab with URL
+        ((JavascriptExecutor) driver)
+                .executeScript("window.open(arguments[0], '_blank');", url);
+
+        // Switch to newly opened tab
+        List<String> tabs = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(tabs.get(tabs.size() - 1));
     }
 }
 

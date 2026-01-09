@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import pageobjects.RecruiterCamapignModulePage;
 import utils.Excelutils;
+import utils.ExtentTestManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,52 +19,81 @@ public class RecruiterCampaignModuleSteps {
     RecruiterCamapignModulePage recruiterCampaignPage;
     List<String[]> campaignTableData;
 
+    // ================= GIVEN =================
+
     @Given("I Navigate To Campaign Module")
     public void i_navigate_to_campaign_module() {
 
-        driver=DriverManager.getDriver();
-        recruiterCampaignPage = new RecruiterCamapignModulePage(driver);
+        driver = DriverManager.getDriver();
+        Assert.assertNotNull(driver, "WebDriver is NULL");
+
+        recruiterCampaignPage =
+                new RecruiterCamapignModulePage(driver);
 
         recruiterCampaignPage.navigatemenu();
 
+        ExtentTestManager.getTest()
+                .info("Navigated to Recruiter Campaign module");
     }
+
+    // ================= WHEN =================
 
     @When("I Captures the campaigns Table data")
     public void i_captures_the_campaigns_table_data() throws IOException {
 
         recruiterCampaignPage.waitforcampainstext();
-        campaignTableData = recruiterCampaignPage.getCampaignTableData();
+
+        campaignTableData =
+                recruiterCampaignPage.getCampaignTableData();
+
+        // ---------- Assertions ----------
+        Assert.assertNotNull(
+                campaignTableData,
+                "Campaign table data is NULL"
+        );
+
+        Assert.assertTrue(
+                campaignTableData.size() > 0,
+                "Campaign table is EMPTY"
+        );
 
         String[] headers = {
                 "name", "medium", "shareVenue",
                 "startDate", "endDate", "status", "createdBy"
         };
 
-        String path = "D:\\selenium-intellij\\src\\test\\resources\\RecruiterDetails.xlsx";
+        String path =
+                "D:\\selenium-intellij\\src\\test\\resources\\RecruiterDetails.xlsx";
         String sheetname = "camapigns";
 
         Excelutils.writeTable(path, sheetname, headers, campaignTableData);
 
-        for (String[] row : campaignTableData) {
-            System.out.println(
-                    "name: " + row[0] +
-                            " | medium: " + row[1] +
-                            " | shareVenue: " + row[2] +
-                            " | startDate: " + row[3] +
-                            " | endDate: " + row[4] +
-                            " | status: " + row[5] +
-                            " | createdBy: " + row[6]);
-        }
+        ExtentTestManager.getTest()
+                .info("Campaign table data captured and written to Excel");
 
+        // Optional logging
+        for (String[] row : campaignTableData) {
+            ExtentTestManager.getTest().info(
+                    "Campaign | " +
+                            "name=" + row[0] +
+                            ", medium=" + row[1] +
+                            ", shareVenue=" + row[2] +
+                            ", startDate=" + row[3] +
+                            ", endDate=" + row[4] +
+                            ", status=" + row[5] +
+                            ", createdBy=" + row[6]
+            );
+        }
     }
 
-
+    // ================= THEN =================
 
     @Then("I should click on logout")
     public void i_should_click_on_logout() {
 
         recruiterCampaignPage.logoutfromapplication();
+
+        ExtentTestManager.getTest()
+                .pass("Recruiter Campaign table verified and logout successful");
     }
-
-
 }

@@ -30,6 +30,8 @@ public class Appselectionpage {
     @FindBy(xpath = "//strong[normalize-space()='Administration']")private WebElement adminselection;
 
 
+    @FindBy(xpath = "//h3[text()=' Recruitment Dashboard']")private WebElement dashboardtext;
+
 
     // Actions
     public void clickOnAppSelection(String appselect) {
@@ -58,11 +60,22 @@ public class Appselectionpage {
 
     public boolean isAppDisplayed() {
         try {
-            WebElement text = wait.waitForVisibility(textdisplay);
+            WebElement text = wait.waitForVisibility(Taselection);
             return text.isDisplayed();
         } catch (Exception e) {
             System.out.println("App not displayed: " + e.getMessage());
         }
         return false;
     }
+
+    public boolean isdashboarddisplayed() {
+        try {
+            WebElement text = wait.waitForVisibility(dashboardtext);
+            return text.isDisplayed();
+        } catch (Exception e) {
+            System.out.println("App not displayed: " + e.getMessage());
+        }
+        return false;
+    }
+
 }

@@ -34,10 +34,10 @@ public class CampaignRecruiterAddingPage {
 
     @FindBy(xpath="//td[contains(text(),' No records found ')]")private WebElement norecordfound;
 
-    @FindBy(xpath = "//div//input[@placeholder='Search Name / State / Region / City / Area']")
+    @FindBy(xpath = "//div//input[@placeholder='Search Name / Medium / Share Venue Contact Info']")
     private WebElement searchinputbox;
 
-    @FindBy(xpath="//div//button[@type='button']//span[contains(text(),'Search')]")private WebElement searchbutton;
+    @FindBy(xpath="//div//button[@type='button']//span[contains(text(),' Search')]")private WebElement searchbutton;
 
     @FindBy(xpath = "//div[@class='candidate-name']//span[contains(text(),'FestiveSale')]")private WebElement rowselection;
 

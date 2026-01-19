@@ -14,8 +14,8 @@ public class TeamMappingSteps {
     TeamMappingPage tm;
 
 
-    @Given("i navigates to team mapping module")
-    public void i_navigates_to_team_mapping_module() {
+    @Given("i navigates to team mapping module for Mapping")
+    public void i_navigates_to_team_mapping_module_for_Mapping() {
 
         driver = DriverManager.getDriver();
         tm = new TeamMappingPage(driver);

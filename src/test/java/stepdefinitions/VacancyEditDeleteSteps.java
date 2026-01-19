@@ -16,8 +16,8 @@ public class VacancyEditDeleteSteps {
     VacancyEditandDeletePage vc;
 
 
-    @Given("i navigate to vacancy module")
-    public void i_navigate_to_vacancy_module(){
+    @Given("i navigate to vacancy module for Edit and Delete actions")
+    public void i_navigate_to_vacancy_module_for_Edit_and_Delete_actions(){
 
        driver= DriverManager.getDriver();
        vc=new VacancyEditandDeletePage(driver);

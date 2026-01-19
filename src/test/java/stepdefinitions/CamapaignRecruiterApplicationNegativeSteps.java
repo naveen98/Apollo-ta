@@ -7,6 +7,7 @@ import org.testng.Assert;
 import pageobjects.CamapaignRecruiterApplicationPage;
 import utils.Excelutils;
 import utils.ExtentTestManager;
+import utils.UrlAssertionUtils;
 
 public class CamapaignRecruiterApplicationNegativeSteps {
 
@@ -15,8 +16,8 @@ public class CamapaignRecruiterApplicationNegativeSteps {
     String copiedUrl;
 
     // ================= GIVEN =================
-    @Given("I am on campaign recruiter page for invaid data")
-    public void I_am_on_campaign_recruiter_page_for_invaid_data() {
+    @Given("I am on campaign recruiter page for checking Invalid data")
+    public void I_am_on_campaign_recruiter_page_for_checking_Invalid_data() {
 
         driver = DriverManager.getDriver();
         page = new CamapaignRecruiterApplicationPage(driver);
@@ -26,7 +27,9 @@ public class CamapaignRecruiterApplicationNegativeSteps {
         page.navigatemenu();
         page.navigatecampignmodule();
 
-        ExtentTestManager.getTest().info("Navigated to Campaign Recruiter Page");
+        UrlAssertionUtils.validateUrl(driver,"https://apollota.v37.dev.zeroco.de/ta/campaign/campaign");
+
+        ExtentTestManager.logPass("Navigated to Campaign Recruiter Page");
     }
 
     // ================= WHEN =================
@@ -48,6 +51,8 @@ public class CamapaignRecruiterApplicationNegativeSteps {
         Assert.assertNotNull(copiedUrl);
 
         page.openUrlInNewTab(copiedUrl);
+
+
     }
 
     // ================= AND =================
@@ -141,7 +146,7 @@ public class CamapaignRecruiterApplicationNegativeSteps {
             page.clickSubmit();
             String formMessage = page.getvalidationmessage();
 
-            ExtentTestManager.getTest().info(" Validation Message: " + formMessage);
+            ExtentTestManager.logPass(" Validation Message: " + formMessage);
 
             try {
                 Assert.assertTrue(formMessage != null && formMessage.toLowerCase().contains(expectedMsg.toLowerCase()), "Expected: " + expectedMsg + " | Actual: " + formMessage);

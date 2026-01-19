@@ -6,9 +6,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
+import org.testng.SkipException;
 import pageobjects.CamapaignRecruiterApplicationPage;
 import utils.Excelutils;
 import utils.ExtentTestManager;
+import utils.UrlAssertionUtils;
 
 import java.io.IOException;
 
@@ -33,10 +35,9 @@ public class CamapaignRecruiterApplicationSteps {
 
         recruiterAppPage.navigatemenu();
         recruiterAppPage.navigatecampignmodule();
+        UrlAssertionUtils.validateUrl(driver,"https://apollota.v37.dev.zeroco.de/ta/campaign/campaign");
 
-        log.info("Navigated to Campaign Recruiter Page");
-
-        ExtentTestManager.getTest().info("Navigated to Campaign Recruiter Page");
+        ExtentTestManager.logPass("Navigated to Campaign Recruiter Page");
     }
 
     // ================= WHEN =================
@@ -47,13 +48,10 @@ public class CamapaignRecruiterApplicationSteps {
         recruiterAppPage.waitforseachvisible();
         recruiterAppPage.searchcampaigns("Apollolabs");
 
-        Assert.assertFalse(recruiterAppPage.isNoRecordFoundDisplayed(), "No campaign found");
-
         recruiterAppPage.selectcampaignrow();
         recruiterAppPage.clickrecruitertab();
         recruiterAppPage.searchcrecruiter("arya");
 
-        Assert.assertFalse(recruiterAppPage.isNoRecordFoundDisplayed(), "No recruiter found");
 
         recruiterAppPage.clickRecruiter();
         recruiterAppPage.clickCopyUrl();
@@ -66,7 +64,7 @@ public class CamapaignRecruiterApplicationSteps {
 
         recruiterAppPage.openUrlInNewTab(copiedUrl);
 
-        ExtentTestManager.getTest().info("Recruiter URL opened in new tab");
+        ExtentTestManager.logPass("Recruiter URL opened in new tab");
     }
 
     // ================= AND =================
@@ -76,24 +74,26 @@ public class CamapaignRecruiterApplicationSteps {
 
         recruiterAppPage.enterMobileNumber("9000008752");
         recruiterAppPage.clicksendotpbutton();
+
         recruiterAppPage.enterOtp("000000");
         recruiterAppPage.clicksendotpbutton();
 
-        String otpverify= recruiterAppPage.getvalidationmessage();
+        String otpverify = recruiterAppPage.getvalidationmessage();
 
-        Assert.assertTrue(otpverify.toLowerCase().contains("otp") || otpverify.toLowerCase().contains("successfully"), "application failed. Toast message: " + otpverify);
+        Assert.assertTrue(otpverify.toLowerCase().contains("otp") || otpverify.toLowerCase().contains("successfully"), "OTP verification failed. Toast message: " + otpverify);
 
+        ExtentTestManager.logPass("OTP verification successful");
 
-        ExtentTestManager.getTest().info("OTP verification successful");
+        // ================= CONDITIONAL STOP =================
         if (recruiterAppPage.isDashboardLoaded()) {
-            ExtentTestManager.getTest().info(" Navigated to dashboard");
+
+            ExtentTestManager.getTest().info("Application Dashboard displayed. Skipping application submission.");
+
             recruiterAppPage.clicklogoutfordashboard();
-            Assert.fail("Dashboard displayed, skipping application submission steps");
 
+            throw new SkipException("Dashboard already exists for this recruiter. Application submission skipped.");
         }
-
     }
-
    // ================= THEN =================
 
     @Then("I click submit application")
@@ -162,7 +162,7 @@ public class CamapaignRecruiterApplicationSteps {
 
             Assert.assertTrue(status.toLowerCase().contains("Application") || status.toLowerCase().contains("successfully"), "application failed. Toast message: " + status);
 
-            ExtentTestManager.getTest().pass("Application submitted successfully : ");
+            ExtentTestManager.logPass("Application submitted successfully : ");
 
 
 

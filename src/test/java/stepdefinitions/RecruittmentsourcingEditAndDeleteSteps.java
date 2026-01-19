@@ -16,8 +16,8 @@ public class RecruittmentsourcingEditAndDeleteSteps {
     RecruittmentsourcingEditAndDeletePage ed;
 
 
-    @Given("i navigate to recruitment sourcing")
-    public void i_navigate_to_recruitment_sourcing(){
+    @Given("i navigate to recruitment scoring for edit and delete actions")
+    public void i_navigate_to_recruitment_sourcing_for_edit_and_delete_actions(){
 
         driver= DriverManager.getDriver();
         ed=new RecruittmentsourcingEditAndDeletePage(driver);

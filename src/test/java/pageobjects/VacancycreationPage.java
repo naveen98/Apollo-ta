@@ -89,7 +89,13 @@ public class VacancycreationPage {
         clickElement(clickvacancymodule);
     }
 
+    public void waitforvacancycreation(){
+        wait.waitForVisibility(AddVacancycreationbutton);
+    }
+
     public void addvacancyCreation() {
+
+
         clickElement(AddVacancycreationbutton);
     }
 

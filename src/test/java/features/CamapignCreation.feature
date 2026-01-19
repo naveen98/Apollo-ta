@@ -10,7 +10,6 @@ Feature: Campaign creation
   Scenario: Verify the clicking Talent Acquisition
     Given I Navigate to App Selection page
     When I clicks on the AppSelection
-    Then Apollo Acquisition app should be displayed
 
 
   @smoke
@@ -21,55 +20,54 @@ Feature: Campaign creation
     Then I create campaigns and verify campaign count
 
 
-  @Smoke
+  @smoke
   Scenario: Verify Edit Action for campaign
     Given I navigate to campaign module
     When I verify edit action for campaign
 
 
-  @Smoke
+  @smoke
   Scenario: Verify adding recruiters to a specific campaign
     Given I have navigated to the Campaigns module
     When I click on a campaign and add recruiters
     Then I should see the recruiters successfully added to the campaign
 
-  @Smoke
+  @smoke
   Scenario: Verify Added recruiter in campaign
     Given I navigate to campaign Recruiter Table
-    When I capture added recruiter in campaign
+    When I capture added recruiter in campaign page
     Then I should see the added recruiter in campaign recruiter table
 
 
-  @Smoke
+  @smoke
   Scenario: verify Login with Recruiter
     Given I login with recruiter credentials
     When I verify recruiter dashboard page
 
-  @Smoke
+  @smoke
   Scenario: Verify the campaign table data from recruiter campaign module
-    Given I Navigate To Campaign Module
+    Given I Navigate To Campaign Module for capturing table data
     When I Captures the campaigns Table data
     Then I should click on logout
 
-  @Smoke
+  @smoke
   Scenario: Login with valid credentials and TalentAcquisition CMS label
     Given I am on the TalentAcquisition login page
     When I login using valid credentials
     Then I should see the TalentAcquisition page
 
-  @Smoke
+  @smoke
   Scenario: Verify the clicking Talent Acquisition
     Given I Navigate to App Selection page
     When I clicks on the AppSelection
-    Then Apollo Acquisition app should be displayed
 
-  @Smoke
-  Scenario: Delete Campaign and check count after delete
-    Given I Navigate to Campaign Module
+  @smoke
+  Scenario: Verify the Delete Campaign and check count after delete
+    Given I Navigate to Campaign Module for delete Campaign
     When i click on Delete Campaign
     Then i Verify the Deleted Campaign
 
-  @Smoke
+  @smoke
   Scenario:I Verify Campaign Recruiter copies URL and completes application
     Given I am on campaign recruiter page
     When I click recruiter copy url and open in new tab
@@ -83,7 +81,7 @@ Feature: Campaign creation
 
   @regression
   Scenario: Verify recruiters Application with invalid Data
-    Given I am on campaign recruiter page for invaid data
+    Given I am on campaign recruiter page for checking Invalid data
     When I open recruiters application url in new tab
     Then I should see validation errors after submitting with invalid data
 

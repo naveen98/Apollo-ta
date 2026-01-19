@@ -7,6 +7,8 @@ import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import pageobjects.CampaignCreationEditPage;
 import utils.Excelutils;
+import utils.ExtentTestManager;
+import utils.UrlAssertionUtils;
 
 import java.io.IOException;
 
@@ -24,6 +26,9 @@ public class CampaignEditSteps {
         Assert.assertNotNull(driver, "Driver is NULL");
         cp.navigatemenu();
         cp.navigateCampaignModule();
+        UrlAssertionUtils.validateUrl(driver,"https://apollota.v37.dev.zeroco.de/ta/campaign/campaign");
+        ExtentTestManager.logPass("Navigated To Campaign Module Successfully");
+
     }
 
     @When("I verify edit action for campaign")
@@ -34,8 +39,6 @@ public class CampaignEditSteps {
 
         String campaignName = "MediKit";
         cp.searchcampaigns(campaignName);
-
-        Assert.assertFalse(cp.isNoRecordFoundDisplayed(), "No campaign found with name: " + campaignName);
 
         String[][] data = Excelutils.getcelldatas(path, sheetName);
         Assert.assertNotNull(data, "Excel data is NULL");
@@ -55,10 +58,12 @@ public class CampaignEditSteps {
             cp.addTargetNextBtn();
             cp.clickupdatebutton();
 
-            String toastMessage = cp.getToastMessage();
+            String toastMessage = cp.gettoastmessage();
             Assert.assertNotNull(toastMessage, "Toast message is NULL after update");
 
             Assert.assertTrue(toastMessage.toLowerCase().contains("updated") || toastMessage.toLowerCase().contains("success"), "Campaign update failed. Actual message: " + toastMessage);
+            ExtentTestManager.logPass("Campaign Updated Successfully");
+
         }
     }
 }

@@ -10,89 +10,89 @@ Feature: Talent Acquisition
   Scenario: Verify the clicking Talent Acquisition
     Given I Navigate to App Selection page
     When I clicks on the AppSelection
-    Then Apollo Acquisition app should be displayed
 
 
    @smoke
-   Scenario: Create campaigns from excel and verify campaign count
+   Scenario:Create campaigns and verify campaign count
      Given I am on the campaign module page
      When I navigate to campaign module for count verification
      And I capture campaign count before creation
-     Then I create campaigns from excel and verify campaign count
+     Then I create campaigns and verify campaign count
 
   @smokes
-  Scenario: Navigate to job module
-    Given i navigate to job module page
-    When i create job from excel sheet
+  Scenario: Verify Navigate to Job Module
+    Given i navigate to job module page for creating job
+    Then  i click create job
+
 
   @smoke
-  Scenario: Navigate to vacancy module
-    Given i navigated to vacancy module
-    Then i create a vacancy from excel sheet
+  Scenario: Verify Navigate to vacancy module for creating vacancy
+    Given i navigate to vacancy module for vacancy creation
+    Then i create a vacancy
 
   @smoke
-  Scenario: Verify vacancy edit and delete actions
-    Given i navigate to vacancy module
+  Scenario: Verify vacancy Edit and Delete actions
+    Given i navigate to vacancy module for Edit and Delete actions
     When i verify the edit action
     Then i verify the delete action
 
   @smoke
-  Scenario: Creation of Team Mapping
-    Given i navigates to team mapping module
+  Scenario: Verify Creation of Team Mapping and Assigning the users
+    Given i navigates to team mapping module for Mapping
     When i add user team mapping and sites to recruiters
     Then i add region hr team mapping and map sites to region hr
 
   @smoke
-  Scenario: Verify edit delete actions in team mapping
-    Given Navigate team mapping module
+  Scenario: Verify Edit And Delete actions In Team Mapping
+    Given  i Navigate team Mapping Module for Edit and Delete Actions
     When i click on edit action recruiters
     And i click on delete action recruiters
     Then i click on edit and delete action region hr
 
   @smoke
-  Scenario: Recruitment scoring under sourcing module
+  Scenario:Verify Recruitment Scoring Under Scoring Module for Adding Scoring
     Given i navigate to sourcing module under recruitment scoring
-    Then i add scoring from excel sheet
+    Then i click add scoring
 
   @smokes
-  Scenario: Verify recruitment souring edit and delete actions
-    Given i navigate to recruitment sourcing
+  Scenario: Verify Recruitment scoring Edit and Delete actions
+    Given i navigate to recruitment scoring for edit and delete actions
     When i click on edit action
     Then i click on delete action
 
   @smokes
-  Scenario: Creating recruiter ranking
+  Scenario: Verify Creating Recruiter ranking
     Given i navigate to recruiter ranking
-    Then i create recruiter ranking from excel sheet
+    Then i create recruiter ranking
 
   @smokes
-  Scenario: Creating Questionnaire Module
-    Given i navigate to Questionnaire module
-    Then i create Questionnaire from excel sheet
+  Scenario: Verify Creating Questionnaire Module
+    Given i navigate to Questionnaire module for creating question
+    Then i create Questionnaire
 
   @smoke
-  Scenario: Verify the campaign creation details
-    Given iam navigate to campaign module
+  Scenario: Verify the Campaign Creation Details
+    Given iam navigate to campaign module for capturing campaign details
     When i verify the created campaign details
-    Then i capture the data into excel
+    Then i capture the data
 
   @smoke
-  Scenario: Verify Applications module
+  Scenario: Verify Applications Module for Capturing Applicant Details
     Given iam navigate to Application module
     When i verify the application details
-    Then i capture the applicants data into excel
+    Then i capture the applicants data
 
 
   @smokes
-  Scenario: User navigate to Venu Module
-    Given I navigate to Venu module from Menubar
-    When I create new Venu configuration from Excel test data
+  Scenario: Verify User Navigate to Venu Module For Creating Venue
+    Given I navigate to Venue module for Venue Creation
+    When I create new Venue configuration
 
     @smoke
-    Scenario: User navigate Venue Module And Capture the data into excel
-      Given Iam navigate to Venu module from Menubar
-      When I verify the created Venu details
-      Then I capture the Venu data into excel file
+    Scenario: Verify User Navigate To Venue Module And Capture the data
+      Given Iam navigate to Venue module for capturing Venu details
+      When I verify the created Venue details
+      Then I capture the Venue data
 
 
 

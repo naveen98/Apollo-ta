@@ -16,8 +16,8 @@ public class CampaigncreationDetailsSteps {
     WebDriver driver;
     CampaignCreationDetailsPage cp;
 
-    @Given("iam navigate to campaign module")
-    public void iam_navigate_to_campaign_module() {
+    @Given("iam navigate to campaign module for capturing campaign details")
+    public void iam_navigate_to_campaign_module_for_capturing_campaign_details() {
         driver = DriverManager.getDriver();
         cp = new CampaignCreationDetailsPage(driver);
         cp.navigatemenu();
@@ -48,8 +48,8 @@ public class CampaigncreationDetailsSteps {
         }
     }
 
-    @Then("i capture the data into excel")
-    public void i_capture_the_data_into_excel() throws IOException {
+    @Then("i capture the data")
+    public void i_capture_the_data() throws IOException {
 
         List<String[]> campaignData = cp.getCampaignTableData();
 

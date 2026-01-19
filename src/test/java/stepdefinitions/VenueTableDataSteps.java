@@ -16,21 +16,21 @@ public class VenueTableDataSteps {
     VenuTableDataFetchPage vv;
 
 
-   @Given ("Iam navigate to Venu module from Menubar")
-    public void Iam_navigate_to_Venu_module_from_Menubar(){
+   @Given ("Iam navigate to Venue module for capturing Venu details")
+    public void Iam_navigate_to_Venue_module_for_capturing_Venu_details(){
         driver= DriverManager.getDriver();
         vv=new VenuTableDataFetchPage(driver);
         vv.navigatetovenumodule();
     }
 
-     @When("I verify the created Venu details")
-        public void I_verify_the_created_Venu_details() {
+     @When("I verify the created Venue details")
+        public void I_verify_the_created_Venue_details() {
          vv.SeachVenudetails("naveen");
 
      }
 
-    @Then("I capture the Venu data into excel file")
-    public void I_capture_the_Venu_data_into_excel_file() throws IOException {
+    @Then("I capture the Venue data")
+    public void I_capture_the_Venue_data() throws IOException {
 
 
         List<String[]> venudata = vv.getVenueTableData();
@@ -43,10 +43,6 @@ public class VenueTableDataSteps {
         Excelutils.writeTable(path, shname, headers, venudata);
 
     }
-
-
-
-
 
 
 }

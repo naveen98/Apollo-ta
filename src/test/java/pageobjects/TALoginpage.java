@@ -1,5 +1,6 @@
 package pageobjects;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -31,6 +32,10 @@ public class TALoginpage {
     @FindBy(xpath = "//strong[normalize-space()='Administration']")
     private WebElement admdisplays;
 
+    @FindBy(xpath="//span[text()='Please close pending candidate interview scheduled records status to proceed further.']")private WebElement recruiterpendingappnotificationdisplay;
+
+    @FindBy(xpath="//h3[text()=' Recruitment Dashboard']")private WebElement recruitdashboardtextdisplay;
+
     public void logindata(String username, String password) {
 
         try {
@@ -42,6 +47,21 @@ public class TALoginpage {
             System.out.println("exception " + e.getMessage());
 
         }
+
+    }
+
+    public boolean ispendingactiontextdisplayed() {
+        try {
+            return driver.findElement(By.xpath("//span[text()='Please close pending candidate interview scheduled records status to proceed further.']")).isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
+    public void waitfordisplayrecruiterdashboardtext(){
+
+        wait.waitForVisibility(recruitdashboardtextdisplay);
 
     }
 

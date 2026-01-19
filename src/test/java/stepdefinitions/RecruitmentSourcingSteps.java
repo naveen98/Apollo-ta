@@ -19,10 +19,11 @@ public class RecruitmentSourcingSteps {
         driver = DriverManager.getDriver();
         rp = new RecruitmentSourcingPage(driver);
         rp.navigatetorecruitmentsourcing();
+
     }
 
-    @Then("i add scoring from excel sheet")
-    public void i_add_scoring_from_excel_sheet() throws IOException {
+    @Then("i click add scoring")
+    public void i_click_add_scoring() throws IOException {
         String path = "D:\\selenium-intellij\\src\\test\\resources\\recruitmentsourcing.xlsx";
         String sheetname = "sourcing";
 

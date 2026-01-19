@@ -33,6 +33,11 @@ public class Appselectionpage {
     @FindBy(xpath = "//h3[text()=' Recruitment Dashboard']")private WebElement dashboardtext;
 
 
+
+    public void waitforappdash(){
+        wait.waitForVisibility(Taselection);
+    }
+
     // Actions
     public void clickOnAppSelection(String appselect) {
         try {

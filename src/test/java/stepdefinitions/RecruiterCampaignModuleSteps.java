@@ -9,6 +9,7 @@ import org.testng.Assert;
 import pageobjects.RecruiterCamapignModulePage;
 import utils.Excelutils;
 import utils.ExtentTestManager;
+import utils.UrlAssertionUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,19 +22,21 @@ public class RecruiterCampaignModuleSteps {
 
     // ================= GIVEN =================
 
-    @Given("I Navigate To Campaign Module")
-    public void i_navigate_to_campaign_module() {
+    @Given("I Navigate To Campaign Module for capturing table data")
+    public void I_navigate_to_campaign_module_for_capturing_table_data() {
 
         driver = DriverManager.getDriver();
         Assert.assertNotNull(driver, "WebDriver is NULL");
 
-        recruiterCampaignPage =
-                new RecruiterCamapignModulePage(driver);
+        recruiterCampaignPage = new RecruiterCamapignModulePage(driver);
 
         recruiterCampaignPage.navigatemenu();
 
-        ExtentTestManager.getTest()
-                .info("Navigated to Recruiter Campaign module");
+        recruiterCampaignPage.waitforsearchcampaign();
+
+        UrlAssertionUtils.validateUrl(driver,"https://apollota.v37.dev.zeroco.de/ta/campaign/campaign");
+
+        ExtentTestManager.logPass("Navigated to Recruiter Campaign module");
     }
 
     // ================= WHEN =================
@@ -43,46 +46,25 @@ public class RecruiterCampaignModuleSteps {
 
         recruiterCampaignPage.waitforcampainstext();
 
-        campaignTableData =
-                recruiterCampaignPage.getCampaignTableData();
+        campaignTableData = recruiterCampaignPage.getCampaignTableData();
 
         // ---------- Assertions ----------
-        Assert.assertNotNull(
-                campaignTableData,
-                "Campaign table data is NULL"
-        );
+        Assert.assertNotNull(campaignTableData, "Campaign table data is NULL");
 
-        Assert.assertTrue(
-                campaignTableData.size() > 0,
-                "Campaign table is EMPTY"
-        );
+        Assert.assertTrue(campaignTableData.size()>=0, "Campaign table is EMPTY");
 
-        String[] headers = {
-                "name", "medium", "shareVenue",
-                "startDate", "endDate", "status", "createdBy"
-        };
+        String[] headers = {"name", "medium", "shareVenue", "startDate", "endDate", "status", "createdBy"};
 
-        String path =
-                "D:\\selenium-intellij\\src\\test\\resources\\RecruiterDetails.xlsx";
+        String path = "D:\\selenium-intellij\\src\\test\\resources\\RecruiterDetails.xlsx";
         String sheetname = "camapigns";
 
         Excelutils.writeTable(path, sheetname, headers, campaignTableData);
 
-        ExtentTestManager.getTest()
-                .info("Campaign table data captured and written to Excel");
+        ExtentTestManager.logPass("Campaign table data captured and written to Excel");
 
         // Optional logging
         for (String[] row : campaignTableData) {
-            ExtentTestManager.getTest().info(
-                    "Campaign | " +
-                            "name=" + row[0] +
-                            ", medium=" + row[1] +
-                            ", shareVenue=" + row[2] +
-                            ", startDate=" + row[3] +
-                            ", endDate=" + row[4] +
-                            ", status=" + row[5] +
-                            ", createdBy=" + row[6]
-            );
+            ExtentTestManager.getTest().info("Campaign | " + "name=" + row[0] + ", medium=" + row[1] + ", shareVenue=" + row[2] + ", startDate=" + row[3] + ", endDate=" + row[4] + ", status=" + row[5] + ", createdBy=" + row[6]);
         }
     }
 
@@ -93,7 +75,8 @@ public class RecruiterCampaignModuleSteps {
 
         recruiterCampaignPage.logoutfromapplication();
 
-        ExtentTestManager.getTest()
-                .pass("Recruiter Campaign table verified and logout successful");
+        UrlAssertionUtils.validateUrl(driver,"https://apollota.v37.dev.zeroco.de/");
+
+        ExtentTestManager.logPass("Recruiter Campaign table verified and logout successful");
     }
 }

@@ -30,8 +30,8 @@ public class ApplicationSteps {
 
     }
 
-    @Then("i capture the applicants data into excel")
-    public void i_capture_the_applicants_data_into_excel() throws IOException {
+    @Then("i capture the applicants data")
+    public void i_capture_the_applicants_data() throws IOException {
 
         List<String[]> applicantsdata = ap.getApplicationsTableData();
         String[] headers = {

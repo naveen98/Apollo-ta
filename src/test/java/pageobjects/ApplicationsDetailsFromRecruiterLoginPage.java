@@ -36,7 +36,7 @@ public class ApplicationsDetailsFromRecruiterLoginPage {
     @FindBy(xpath = "(//div//input[@placeholder='Search '])[1]")
     private WebElement searchinputbox;
 
-    @FindBy(xpath="//div//button[@type='button']//span[contains(text(),'Search')]")private WebElement searchbutton;
+    @FindBy(xpath="//div//button[@type='button']//span[contains(text(),' Search')]")private WebElement searchbutton;
 
     // ================= Table =================
 

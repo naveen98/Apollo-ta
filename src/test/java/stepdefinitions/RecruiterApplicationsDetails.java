@@ -35,7 +35,7 @@ public class RecruiterApplicationsDetails {
         Assert.assertTrue(displayed, "Application module text  is NOT displayed");
 
 
-        ExtentTestManager.getTest().info("Navigated to Applications module");
+        ExtentTestManager.logPass("Navigated to Applications module");
 
     }
     @Then("I verify the candidate application and capture the status")

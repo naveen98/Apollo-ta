@@ -36,11 +36,11 @@ public class CampaignCreationEditPage {
     private WebElement campaignmodule;
 
 
-    @FindBy(xpath = "//div//button[@id='btnNxt']//span[contains(text(),'Next')]")
+    @FindBy(xpath = "(//div//button[@class='btn btn-primary ml-1 ng-star-inserted'][contains(text(),' Next ')])[1]")
     private WebElement nextbtn;
 
     private By nextbtnby =
-            By.xpath("//div//button[@id='btnNxt']//span[contains(text(),'Next')]");
+            By.xpath("(//div//button[@class='btn btn-primary ml-1 ng-star-inserted'][contains(text(),' Next ')])[1]");
 
     // ---------- Radio buttons ----------
 
@@ -51,22 +51,35 @@ public class CampaignCreationEditPage {
     private WebElement mediumLabel;
 
     // ---------- Target ----------
-    @FindBy(xpath = "//div//input[@placeholder='Search Name / State / Region / City / Area']")
+    @FindBy(xpath = "//div//input[@placeholder='Search Name / Medium / Share Venue Contact Info']")
     private WebElement searchinputbox;
 
-    @FindBy(xpath = "//button[@id='btnNext']")
+    @FindBy(xpath = "(//button[@class='btn btn-primary ml-1 ng-star-inserted'])[2]")
     private WebElement targetnextbtn;
 
     // ---------- Notes ----------
     @FindBy(xpath = "//textarea[@placeholder='Enter notes']")
     private WebElement notes;
 
-    @FindBy(xpath = "//zc-button//div//button[@id='btnUpdate']")
+    @FindBy(xpath = "//button[contains(text(),' Submit ')]")
     private WebElement updatebutton;
+
 
     // ---------- Toast ----------
     private By toastMsg =
             By.xpath("//div[contains(@class,'toast-message') and contains(@class,'ng-star-inserted')]");
+
+    private By toastorpopup=By.xpath("//div[(@role='alert' and contains(@class,'toast-message'))     or (contains(@class,'modal-body')     and contains(text(),'Please enter all the mandatory fields before saving'))]");
+
+    @FindBy(xpath = "//button[@id='dialog-okay-btn']")
+    private WebElement popupOkButton;
+
+    @FindBy(xpath = "//button[@id='dialog-cancel-btn']")
+    private WebElement popupCancelButton;
+
+    private final By popupMessageLocator = By.xpath("//div[contains(@class,'modal-body') and contains(text(),'Please enter all the mandatory fields before saving.')]");
+
+
 
     // ---------- Close ----------
     @FindBy(xpath = "//button[contains(@class,'close')]")
@@ -76,7 +89,7 @@ public class CampaignCreationEditPage {
 
     @FindBy(xpath="//td[contains(text(),' No records found ')]")private WebElement norecordfound;
 
-    @FindBy(xpath="//div//button[@type='button']//span[contains(text(),'Search')]")private WebElement searchbutton;
+    @FindBy(xpath="//div//button[@type='button']//span[contains(text(),' Search')]")private WebElement searchbutton;
     @FindBy(xpath = "//div[@class='dropdown-menu user-menu actions-menu show']//button//i[@class='icon-edit']")private WebElement Editoption;
     @FindBy(xpath = "//div[@class='dropdown-menu user-menu actions-menu show']//button//i[@class='icon-delete']")private WebElement Deleteoption;
     @FindBy(xpath = "//div[@class='dropdown-menu user-menu actions-menu show']//button//i[@class='icon-cancel-c']")private WebElement Canceloption;
@@ -206,6 +219,90 @@ public class CampaignCreationEditPage {
         }
         return "No message displayed";
     }
+
+
+    //-----------------------------------------
+    public boolean handlePopupOK() {
+        try {
+            WebElement popupMsg = wait.waitForVisibilityBy(popupMessageLocator);
+            if (popupMsg != null && popupMsg.isDisplayed()) {
+                WebElement okBtn = wait.waitForClickability(popupOkButton);
+                try {
+                    okBtn.click();
+                } catch (Exception ex) {
+                    js.executeScript("arguments[0].click();", popupOkButton);
+                }
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println("Popup not displayed: " + e.getMessage());
+        }
+        return false;
+    }
+    //===================================================================================
+
+
+    public String gettoastmessage() {
+        try {
+            List<WebElement> messageElements = wait.waitForAllElementsVisible(toastorpopup);
+
+            if (messageElements != null && !messageElements.isEmpty()) {
+                for (WebElement msgElement : messageElements) {
+                    if (!msgElement.isDisplayed())
+                        continue;
+
+                    String message = msgElement.getText().trim();
+                    System.out.println("Toast message: " + message);
+
+                    switch (message) {
+                        case "Campaign Updated Successfully":
+
+                            return message;
+
+                        case "Code already exists!":
+                            clickcloseform();
+                            return  message;
+
+                        case "Campaign Deleted Successfully":
+
+                            return message;
+
+
+                        case"Please enter all the mandatory fields before saving.":
+                            handlePopupOK();
+
+                            return message;
+
+
+                        default:
+                            // cancelform();
+                            return message;
+                    }
+                }
+            } else {
+                System.out.println("Toast or popup not visible.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error  validation message: " + e.getMessage());
+        }
+        return "No Message Displayed";
+    }
+
+    public void clickcloseform(){
+
+        try{
+            WebElement close=wait.waitForVisibility(closeform);
+            if(close!=null && close.isDisplayed()){
+                close.click();
+            }
+
+        } catch (Exception e) {
+            js.executeScript("arguments[0].click();",closeform);
+        }
+    }
+
+
+
 
     public void clickCloseForm() {
         try {

@@ -78,10 +78,10 @@ public class CampaignCreationPage {
 
     private By mylocationbtnby = By.xpath("//div//button[@class='btn btn-default my-location ng-star-inserted']//span[contains(text(),'My location')]");
 
-    @FindBy(xpath = "//div//button[@id='btnNxt']//span[contains(text(),'Next')]")
+    @FindBy(xpath = "(//div//button[@class='btn btn-primary ml-1 ng-star-inserted'][contains(text(),' Next ')])[1]")
     private WebElement nextbtn;
 
-    private By nextbtnby = By.xpath("//div//button[@id='btnNxt']//span[contains(text(),'Next')]");
+    private By nextbtnby = By.xpath("(//div//button[@class='btn btn-primary ml-1 ng-star-inserted'][contains(text(),' Next ')])[1]");
 
 
     //radio locators
@@ -125,7 +125,7 @@ public class CampaignCreationPage {
 
 
     //TARGETS
-    @FindBy(xpath = "//p-select[@placeholder='Select source type']//span[@id='source_type_uid']")
+    @FindBy(xpath = "//div//p-select[@placeholder='Select source type']//span[@id='source_type_uid']")
     private WebElement sourcetypedrp;
 
     private By sourcetypeoptions = By.xpath("//p-selectitem//li[@role='option']");
@@ -134,18 +134,30 @@ public class CampaignCreationPage {
     private WebElement searchinputforsoucetypeoptions;
 
 
-    @FindBy(xpath = "//button[@id='btnNext']")
+    @FindBy(xpath = "(//button[@class='btn btn-primary ml-1 ng-star-inserted'])[2]")
     private WebElement targetnextbtn;
 
     //notes
     @FindBy(xpath = "//textarea[@placeholder='Enter notes']")
     private WebElement notes;
 
-    @FindBy(xpath = "//div//button[@id='btnSave']")
+    @FindBy(xpath = "//button[@class='btn btn-primary ml-1 ng-star-inserted'][contains(text(),' Submit ')]")
     private WebElement saveandcontinubuttonn;
 
 
     private By toastMsg = By.xpath("//div[contains(@class, 'toast-message') and contains(@class, 'ng-star-inserted')]");
+    private By toastorpopup=By.xpath("//div[(@role='alert' and contains(@class,'toast-message'))     or (contains(@class,'modal-body')     and contains(text(),'Please enter all the mandatory fields before saving'))]");
+
+    @FindBy(xpath = "//button[@id='dialog-okay-btn']")
+    private WebElement popupOkButton;
+
+    @FindBy(xpath = "//button[@id='dialog-cancel-btn']")
+    private WebElement popupCancelButton;
+
+    private final By popupMessageLocator = By.xpath("//div[contains(@class,'modal-body') and contains(text(),'Please enter all the mandatory fields before saving.')]");
+
+
+
 
 
     //Action Methods
@@ -182,6 +194,12 @@ public class CampaignCreationPage {
             js.executeScript("arguments[0].scrollIntoView({block: 'center'});", campaignmodule);
             js.executeScript("arguments[0].click();", campaignmodule);
         }
+    }
+
+
+    public void waitforcreatecampaign(){
+         wait.waitForVisibility(CreateCampaignbtn);
+
     }
 
 
@@ -233,7 +251,7 @@ public class CampaignCreationPage {
             input.clear();
             input.sendKeys(venueText);
 
-            input.sendKeys(Keys.SPACE);
+          //  input.sendKeys(Keys.SPACE);
             WebElement option = wait.waitForVisibilityBy(venueOptions);
             option.click();
 
@@ -250,7 +268,7 @@ public class CampaignCreationPage {
 
     public void clickNextButton() {
 
-        By nextButton = By.xpath("//div//button[@class='btn btn-primary ng-star-inserted']//span[contains(text(),'Next')]");
+        By nextButton = By.xpath("(//div//button[@class='btn btn-primary ml-1 ng-star-inserted'][contains(text(),' Next ')])[1]");
 
         try {
             WebElement nextElement = wait.waitForVisibilityBy(nextButton);
@@ -401,9 +419,32 @@ public class CampaignCreationPage {
 
 
 
+    //================================================================
+
+    //-----------------------------------------
+    public boolean handlePopupOK() {
+        try {
+            WebElement popupMsg = wait.waitForVisibilityBy(popupMessageLocator);
+            if (popupMsg != null && popupMsg.isDisplayed()) {
+                WebElement okBtn = wait.waitForClickability(popupOkButton);
+                try {
+                    okBtn.click();
+                } catch (Exception ex) {
+                    js.executeScript("arguments[0].click();", popupOkButton);
+                }
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println("Popup not displayed: " + e.getMessage());
+        }
+        return false;
+    }
+    //===================================================================================
+
+
     public String gettoastmessage() {
         try {
-            List<WebElement> messageElements = wait.waitForAllElementsVisible(toastMsg);
+            List<WebElement> messageElements = wait.waitForAllElementsVisible(toastorpopup);
 
             if (messageElements != null && !messageElements.isEmpty()) {
                 for (WebElement msgElement : messageElements) {
@@ -425,6 +466,12 @@ public class CampaignCreationPage {
                         case "Campaign Deleted Successfully":
 
                             return message;
+
+                        case"Please enter all the mandatory fields before saving.":
+                            handlePopupOK();
+
+                            return message;
+
 
                         default:
                             // cancelform();

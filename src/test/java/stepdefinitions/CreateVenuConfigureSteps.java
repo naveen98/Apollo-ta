@@ -18,8 +18,8 @@ public class CreateVenuConfigureSteps {
     private static final String sheetname = "venu";
 
 
-    @Given("I navigate to Venu module from Menubar")
-    public void I_navigate_to_Venu_module_from_Menubar() {
+    @Given("I navigate to Venue module for Venue Creation")
+    public void I_navigate_to_Venue_module_for_Venue_Creation() {
 
         driver = DriverManager.getDriver();
         venupage = new CreateVenuPage(driver);
@@ -28,8 +28,8 @@ public class CreateVenuConfigureSteps {
 
     }
 
-    @When("I create new Venu configuration from Excel test data")
-    public void I_create_new_Venu_configuration_from_Excel_test_data() throws IOException {
+    @When("I create new Venue configuration")
+    public void I_create_new_Venue_configuration() throws IOException {
         String[][] data = Excelutils.getcelldatas(path, sheetname);
 
         for (int i = 0; i < 1; i++) {

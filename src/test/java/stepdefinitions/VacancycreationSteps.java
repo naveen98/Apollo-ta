@@ -7,6 +7,8 @@ import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import pageobjects.VacancycreationPage;
 import utils.Excelutils;
+import utils.ExtentTestManager;
+import utils.UrlAssertionUtils;
 
 import java.io.IOException;
 
@@ -15,15 +17,18 @@ public class VacancycreationSteps {
     WebDriver driver;
     VacancycreationPage vc;
 
-    @Given("i navigated to vacancy module")
-    public void i_navigated_to_vacancy_module() {
+    @Given("i navigate to vacancy module for vacancy creation")
+    public void i_navigated_to_vacancy_module_for_vacancy_creation() {
         driver = DriverManager.getDriver();
         vc = new VacancycreationPage(driver);
         vc.navigatevacancymodule();
+        UrlAssertionUtils.validateUrl(driver,"https://apollota.v37.dev.zeroco.de/ta/vacancy/vacancy");
+        ExtentTestManager.logPass("-----------Navigated to Vacancy Module successfully-----------");
     }
 
-    @Then("i create a vacancy from excel sheet")
-    public void i_create_a_vacancy_from_excel_sheet() throws IOException {
+
+    @Then("i create a vacancy")
+    public void i_create_a_vacancy() throws IOException {
 
         String path = "D:\\selenium-intellij\\src\\test\\resources\\vacancycreation.xlsx";
         String sheetname = "vacancy";

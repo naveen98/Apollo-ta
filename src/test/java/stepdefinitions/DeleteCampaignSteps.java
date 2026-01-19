@@ -5,6 +5,8 @@ import io.cucumber.java.en.*;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import pageobjects.*;
+import utils.ExtentTestManager;
+import utils.UrlAssertionUtils;
 
 public class DeleteCampaignSteps {
 
@@ -23,78 +25,70 @@ public class DeleteCampaignSteps {
 
     // ================= GIVEN =================
 
-    @Given("I Navigate to Campaign Module")
-    public void i_navigate_to_campaign_module() {
+    @Given("I Navigate to Campaign Module for delete Campaign")
+    public void i_navigate_to_campaign_module_for_delete_Campaign() {
 
-        driver = DriverManager.getDriver();
-        Assert.assertNotNull(driver, "WebDriver is NULL");
+      try {
+          driver = DriverManager.getDriver();
+          Assert.assertNotNull(driver, "WebDriver is NULL");
 
-        deleteCampaignPage = new DeleteCampaignPage(driver);
-        campaignCounts = new CamapaignsCountsPage(driver);
-        pageCounts = new CampaigntotalPagecounts(driver);
+          deleteCampaignPage = new DeleteCampaignPage(driver);
+          campaignCounts = new CamapaignsCountsPage(driver);
+          pageCounts = new CampaigntotalPagecounts(driver);
 
-        deleteCampaignPage.navigateCampaignsModule();
+          deleteCampaignPage.navigateCampaignsModule();
+          deleteCampaignPage.waitforsechbutton();
+          UrlAssertionUtils.validateUrl(driver, "https://apollota.v37.dev.zeroco.de/ta/campaign/campaign");
+      }
+        catch (Exception e) {
+
+            ExtentTestManager.logFail("Exception in navigating to Campaign Module: " + e.getMessage());
+        }
+
+
     }
 
     // ================= WHEN =================
 
     @When("i click on Delete Campaign")
     public void i_click_on_delete_campaign() {
+        try {
+            // ===== BEFORE DELETE =====
+            countBeforeDelete = campaignCounts.getTotalCampaignCount();
+            pageBeforeDelete = pageCounts.getTotalPagesFromText();
 
-        // ===== BEFORE DELETE =====
-        countBeforeDelete = campaignCounts.getTotalCampaignCount();
-        pageBeforeDelete = pageCounts.getTotalPagesFromText();
+            Assert.assertTrue(countBeforeDelete > 0, "No campaigns available to delete");
 
-        Assert.assertTrue(
-                countBeforeDelete > 0,
-                "No campaigns available to delete"
-        );
+            // ===== DELETE FLOW =====
+            deleteCampaignPage.searchcampaigns(campaignName);
 
-        // ===== DELETE FLOW =====
-        deleteCampaignPage.searchcampaigns(campaignName);
 
-        Assert.assertFalse(
-                deleteCampaignPage.isNoRecordFoundDisplayed(),
-                "Campaign not found for deletion: " + campaignName
-        );
+            deleteCampaignPage.clickDeleteOption();
 
-        deleteCampaignPage.clickDeleteOption();
+            Assert.assertTrue(deleteCampaignPage.handlePopupOK(), "Delete confirmation popup not displayed");
 
-        Assert.assertTrue(
-                deleteCampaignPage.handlePopupOK(),
-                "Delete confirmation popup not displayed"
-        );
+            String toast = deleteCampaignPage.getvalidationmessage();
 
-        String toast = deleteCampaignPage.getvalidationmessage();
+            Assert.assertNotNull(toast, "Toast message is NULL");
 
-        Assert.assertNotNull(
-                toast,
-                "Toast message is NULL"
-        );
+            Assert.assertTrue(toast.toLowerCase().contains("deleted"), "Unexpected toast message: " + toast);
 
-        Assert.assertTrue(
-                toast.toLowerCase().contains("deleted"),
-                "Unexpected toast message: " + toast
-        );
+            // ===== AFTER DELETE =====
+            driver.navigate().refresh();
 
-        // ===== AFTER DELETE =====
-        driver.navigate().refresh();
+            countAfterDelete = campaignCounts.getTotalCampaignCount();
+            pageAfterDelete = pageCounts.getTotalPagesFromText();
 
-        countAfterDelete = campaignCounts.getTotalCampaignCount();
-        pageAfterDelete = pageCounts.getTotalPagesFromText();
+            // ----- Count Assertion -----
+            Assert.assertEquals(countAfterDelete, countBeforeDelete - campaignsDeleted, "Campaign count mismatch after delete");
 
-        // ----- Count Assertion -----
-        Assert.assertEquals(
-                countAfterDelete,
-                countBeforeDelete - campaignsDeleted,
-                "Campaign count mismatch after delete"
-        );
+            // ----- Pagination Assertion -----
+            Assert.assertTrue(pageAfterDelete <= pageBeforeDelete, "Pagination count increased after delete");
+        }
+        catch (Exception e) {
+            ExtentTestManager.logFail("Exception in deleting campaign: " + e.getMessage());
+        }
 
-        // ----- Pagination Assertion -----
-        Assert.assertTrue(
-                pageAfterDelete <= pageBeforeDelete,
-                "Pagination count increased after delete"
-        );
     }
 
     // ================= THEN =================

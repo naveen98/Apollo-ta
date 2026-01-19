@@ -16,15 +16,15 @@ public class JobCreationSteps {
     JobsCreationPage jb;
     Radiobuttons rd;
 
-    @Given("i navigate to job module page")
-    public void i_navigate_to_job_module_page() {
+    @Given("i navigate to job module page for creating job")
+    public void i_navigate_to_job_module_page_for_creating_job() {
         driver = DriverManager.getDriver();
         jb = new JobsCreationPage(driver);
         jb.navigatetojobs();
     }
 
-    @When("i create job from excel sheet")
-    public void i_create_job_from_excel_sheet() throws IOException {
+    @Then("i click create job" )
+    public void i_click_create_job () throws IOException {
 
         String path = "C:\\Users\\navee\\IdeaProjects\\Apollo-ta\\src\\test\\resources\\jobcreation.xlsx";
         String sheetname = "job";

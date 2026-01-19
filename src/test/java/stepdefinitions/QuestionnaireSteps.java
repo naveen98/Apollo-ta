@@ -13,8 +13,8 @@ public class QuestionnaireSteps {
     WebDriver driver;
     QuestionnairePages qp;
 
-    @Given("i navigate to Questionnaire module")
-    public void i_navigate_to_Questionnaire_module(){
+    @Given("i navigate to Questionnaire module for creating question")
+    public void i_navigate_to_Questionnaire_module_for_creating_question(){
         driver= DriverManager.getDriver();
         qp=new QuestionnairePages(driver);
         qp.navigatetoQuestionaries();
@@ -22,8 +22,8 @@ public class QuestionnaireSteps {
 
 
     }
-    @Then ("i create Questionnaire from excel sheet")
-    public void i_create_Questionnaire_from_excel_sheet() throws IOException {
+    @Then ("i create Questionnaire")
+    public void i_create_Questionnaire() throws IOException {
 
        String path="C:\\Users\\navee\\IdeaProjects\\Apollo-ta\\src\\test\\resources\\questionaries.xlsx";
        String sheetname="question";

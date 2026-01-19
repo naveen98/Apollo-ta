@@ -10,5 +10,6 @@ public class UrlAssertionUtils {
         String actualUrl = driver.getCurrentUrl();
 
         Assert.assertTrue(actualUrl.contains(expectedText), "URL validation failed. Expected to contain: " + expectedText + " but was: " + actualUrl);
+
     }
 }

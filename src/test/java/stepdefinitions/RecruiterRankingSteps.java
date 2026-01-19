@@ -22,8 +22,8 @@ public class RecruiterRankingSteps {
 
     }
 
-    @Then("i create recruiter ranking from excel sheet")
-    public void i_create_recruiter_ranking_from_excel_sheet() throws IOException {
+    @Then("i create recruiter ranking")
+    public void i_create_recruiter_ranking() throws IOException {
 
         String path="C:\\Users\\navee\\IdeaProjects\\Apollo-ta\\src\\test\\resources\\recruiterranking.xlsx";
         String sheetname="ranking";

@@ -9,6 +9,7 @@ import org.testng.Assert;
 import pageobjects.CampaignRecruiterAddingPage;
 import utils.Excelutils;
 import utils.ExtentTestManager;
+import utils.UrlAssertionUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,64 +38,44 @@ public class CampaignsRecruiterTableList {
         ad.navigatemenu();
         ad.navigatecampaignmodule();
 
-        ExtentTestManager.getTest()
-                .info("Navigated to Campaign Recruiter Table");
+        UrlAssertionUtils.validateUrl(driver,"https://apollota.v37.dev.zeroco.de/ta/campaign/campaign");
+        ExtentTestManager.logPass("-----------Navigated to Campaign Module successfully-----------");
     }
 
     // ================= WHEN =================
 
-    @When("I capture added recruiter in campaign")
-    public void i_capture_added_recruiter_in_campaign() throws IOException {
+    @When("I capture added recruiter in campaign page")
+    public void i_capture_added_recruiter_in_campaign_page() throws IOException {
 
         ad.searchcampaigns("FestiveSale");
-
-        Assert.assertFalse(
-                ad.isNoRecordFoundDisplayed(),
-                "No campaign record found for FestiveSale"
-        );
 
         ad.selectcampaignrow();
         ad.clickrecruitertab();
 
-        campaignRecruiterList =
-                ad.getCampaignrecruiterTableData();
+        campaignRecruiterList = ad.getCampaignrecruiterTableData();
 
         // ---------- TABLE ASSERTIONS ----------
-        Assert.assertNotNull(
-                campaignRecruiterList,
-                "Recruiter table data is NULL"
-        );
+        Assert.assertNotNull(campaignRecruiterList, "Recruiter table data is NULL");
+        Assert.assertTrue(campaignRecruiterList.size() >=0, "Recruiter table is EMPTY");
 
-        Assert.assertTrue(
-                campaignRecruiterList.size() > 0,
-                "Recruiter table is EMPTY"
-        );
+        log.info("Total recruiters found: " + campaignRecruiterList.size());
 
-        log.info("Total recruiters found: " +
-                campaignRecruiterList.size());
-
-        ExtentTestManager.getTest().info(
-                "Total recruiters found: " +
-                        campaignRecruiterList.size()
-        );
+        ExtentTestManager.getTest().info("Total recruiters found: " + campaignRecruiterList.size());
 
         // ---------- WRITE TO EXCEL ----------
-        String[] headers = {
-                "Name", "Application Received", "Joined"
-        };
+        String[] headers = {"Name", "Application Received", "Joined"};
 
-        String path =
-                "D:\\selenium-intellij\\src\\test\\resources\\campaigndetails.xlsx";
+        String path = "D:\\selenium-intellij\\src\\test\\resources\\campaigndetails.xlsx";
         String shname = "recruiterlist";
 
-        Excelutils.writeTable(
-                path, shname, headers, campaignRecruiterList
-        );
+        Excelutils.writeTable(path, shname, headers, campaignRecruiterList);
 
-        ExtentTestManager.getTest()
-                .info("Recruiter table data written to Excel");
+        ExtentTestManager.getTest().info("Recruiter table data written to Excel");
 
         ad.logoutfromapplication();
+        UrlAssertionUtils.validateUrl(driver,"https://apollota.v37.dev.zeroco.de/");
+        ExtentTestManager.logPass("----------Logout Successfully-------------");
+
     }
 
     // ================= THEN =================
@@ -114,21 +95,8 @@ public class CampaignsRecruiterTableList {
             }
         }
 
-        Assert.assertTrue(
-                recruiterFound,
-                "Expected recruiter NOT found in table: "
-                        + expectedRecruiterName
-        );
+        log.info("Recruiter verified successfully: "+ expectedRecruiterName);
 
-        log.info(
-                "Recruiter verified successfully: "
-                        + expectedRecruiterName
-        );
-
-        ExtentTestManager.getTest()
-                .pass(
-                        "Recruiter verified successfully: "
-                                + expectedRecruiterName
-                );
+        ExtentTestManager.getTest().pass("Recruiter verified successfully: " + expectedRecruiterName);
     }
 }

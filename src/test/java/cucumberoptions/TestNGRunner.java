@@ -7,16 +7,11 @@ import org.testng.annotations.DataProvider;
 @CucumberOptions(
         features = "src/test/java/features/CamapignCreation.feature",
         glue = {"stepdefinitions", "hooks"},
-        plugin = {
-                "pretty",
-                "html:target/cucumber-report.html",
-                "json:target/cucumber.json",
-                "junit:target/cucumber-reports/Cucumber.xml",
-                "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"
-        },
+        plugin = {"pretty", "html:target/cucumber-report.html", "json:target/cucumber.json", "junit:target/cucumber-reports/Cucumber.xml", "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"},
         monochrome = true,
         dryRun =false,
-        tags="@smoke" )
+        tags="@smoke"
+)
 
 public class TestNGRunner extends AbstractTestNGCucumberTests {
     @Override

@@ -17,8 +17,8 @@ public class TeamMappingEditAndDeleteSteps {
     TeamMappingEditandDeletePage ed;
 
 
-    @Given("Navigate team mapping module")
-    public void navigate_team_mapping_module() {
+    @Given("i Navigate team Mapping Module for Edit and Delete Actions")
+    public void i_Navigate_team_Mapping_Module_for_Edit_and_Delete_Actions() {
         driver= DriverManager.getDriver();
         ed=new TeamMappingEditandDeletePage(driver);
         ed.navigateToTeamMapping();

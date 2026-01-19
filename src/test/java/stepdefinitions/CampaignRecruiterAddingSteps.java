@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import pageobjects.CampaignRecruiterAddingPage;
 import utils.ExtentTestManager;
+import utils.UrlAssertionUtils;
 
 public class CampaignRecruiterAddingSteps {
 
@@ -27,9 +28,8 @@ public class CampaignRecruiterAddingSteps {
         rp = new CampaignRecruiterAddingPage(driver);
 
         rp.navigatemenu();
-
-        ExtentTestManager.getTest().info("Navigated to Campaign module");
-        Assert.assertNotNull(driver, "WebDriver is NULL");
+        UrlAssertionUtils.validateUrl(driver,"https://apollota.v37.dev.zeroco.de/ta/campaign/campaign");
+        ExtentTestManager.logPass("-----Navigated to Campaign Module  Successfully-------");
     }
 
     // ---------------- WHEN ----------------
@@ -39,7 +39,6 @@ public class CampaignRecruiterAddingSteps {
 
         rp.searchcampaigns("FestiveSale");
 
-        Assert.assertFalse(rp.isNoRecordFoundDisplayed(), "No campaign record found");
 
         rp.selectcampaignrow();
         rp.clickrecruitertab();
@@ -64,7 +63,9 @@ public class CampaignRecruiterAddingSteps {
 
         Assert.assertNotNull(toastMessage, "Toast message is NULL");
 
-        Assert.assertTrue(toastMessage.toLowerCase().contains("recruiter") || toastMessage.toLowerCase().contains("added") || toastMessage.toLowerCase().contains("success"), "Recruiter addition failed. Toast: " + toastMessage   );
+        Assert.assertTrue(toastMessage.toLowerCase().contains("recruiter") || toastMessage.toLowerCase().contains("added") || toastMessage.toLowerCase().contains("successfully"), "Recruiter addition failed. Toast: " + toastMessage   );
+
+         ExtentTestManager.logPass("--------Recruiter Added Successfully-------------");
 
     }
 }

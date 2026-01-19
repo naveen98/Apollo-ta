@@ -33,8 +33,8 @@ public class AppSelectionSteps {
 
         Assert.assertNotNull(driver, "Driver is NULL - browser not launched");
 
-
-        UrlAssertionUtils.validateUrl(driver, "account/app-selection");
+        ap.waitforappdash();
+        UrlAssertionUtils.validateUrl(driver, "/account/app-selection");
 
     }
 
@@ -47,23 +47,30 @@ public class AppSelectionSteps {
 
         ap.clickOnAppSelection("talentacq");
 
-        Assert.assertTrue(true, "Click action executed");
+        ap.isdashboarddisplayed();
+
+        UrlAssertionUtils.validateUrl(driver, "https://apollota.v37.dev.zeroco.de/ta/dashboard/dashboard");
+
+        ExtentTestManager.logPass("-----------Clicked on Talent Acquisition app successfully-----------");
     }
 
     // ================= THEN =================
 
-    @Then("Apollo Acquisition app should be displayed")
+   /* @Then("Apollo Acquisition app should be displayed")
     public void Apollo_Acquisition_app_should_be_displayed() {
 
         log.info("Verifying Talent Acquisition app display");
         ExtentTestManager.getTest().info("Verifying Talent Acquisition app display");
 
         boolean displayed = ap.isAppDisplayed();
+        ap.waitforappdash();
 
         Assert.assertTrue(displayed, "Talent Acquisition application is NOT displayed");
 
 
         log.info("Talent Acquisition app displayed successfully");
         ExtentTestManager.getTest().pass("Talent Acquisition app displayed successfully");
-    }
+    }*/
+
+
 }

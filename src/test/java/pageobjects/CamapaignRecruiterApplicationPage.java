@@ -37,10 +37,10 @@ public class CamapaignRecruiterApplicationPage {
     @FindBy(xpath = "//li[@id='menu-li-campaign-campaign']//span[text()='Campaigns']")
     private WebElement campaignmodule;
 
-    @FindBy(xpath = "//div//button[@type='button']//span[contains(text(),'Search')]")
+    @FindBy(xpath = "//div//button[@type='button']//span[contains(text(),' Search')]")
     private WebElement searchbutton;
 
-    @FindBy(xpath = "//div//input[@placeholder='Search Name / State / Region / City / Area']")
+    @FindBy(xpath = "//div//input[@placeholder='Search Name / Medium / Share Venue Contact Info']")
     private WebElement searchinputbox;
 
     @FindBy(xpath = "(//div//input[@placeholder='Search '])[1]")
@@ -552,11 +552,9 @@ public class CamapaignRecruiterApplicationPage {
     public boolean isDashboardLoaded() {
             try {
                 WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-                return   driver.getCurrentUrl().contains("/dashboard/app-dashboard");
+                return  driver.getCurrentUrl().contains("https://apollota.v37.dev.zeroco.de/ta/dashboard/app-dashboard");
 
             } catch (TimeoutException e) {
-
-
                 return false;
 
 

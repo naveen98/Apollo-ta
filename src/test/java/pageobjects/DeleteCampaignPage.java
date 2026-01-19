@@ -41,10 +41,10 @@ public class DeleteCampaignPage {
 
 
     // ---------- Search  ----------
-    @FindBy(xpath = "//div//input[@placeholder='Search Name / State / Region / City / Area']")
+    @FindBy(xpath = "//div//input[@placeholder='Search Name / Medium / Share Venue Contact Info']")
     private WebElement searchinputbox;
 
-    @FindBy(xpath="//div//button[@type='button']//span[contains(text(),'Search')]")private WebElement searchbutton;
+    @FindBy(xpath="//div//button[@type='button']//span[contains(text(),' Search')]")private WebElement searchbutton;
 
     @FindBy(xpath="//td[contains(text(),' No records found ')]")private WebElement norecordfound;
 
@@ -106,6 +106,9 @@ public class DeleteCampaignPage {
         clickElement(searchbutton);
     }
 
+    public void waitforsechbutton(){
+        wait.waitForVisibility(searchbutton);
+    }
 
     public void  clickDeleteOption() {
         clickElement(clickactionsbuttons);
